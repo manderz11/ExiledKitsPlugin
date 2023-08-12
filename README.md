@@ -1,4 +1,4 @@
-# OccasionalBlackout
+# Kits
 
 A Exiled kits plugin for SCP:SL. This plugin supports creation of kits only through the config file. Kits support giving items, ammo and status effects with configurable intensities and durations.
 
