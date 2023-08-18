@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
 
@@ -76,6 +77,20 @@ public class KitManager
 
     public KitEntry GetKitEntryFromName(string name)
     {
-        return KitEntries.First(x => x.Name == name);
+        KitEntry kitEntry = null;
+        try
+        {
+            kitEntry = KitEntries.First(x => x.Name == name);
+        }
+        catch (Exception e)
+        {
+            if (Plugin.Instance.Config.Debug)
+            {
+                Log.Debug($"Kit entry was not found, exception: {e}");
+            }
+            return null;
+        }
+
+        return kitEntry;
     }
 }
