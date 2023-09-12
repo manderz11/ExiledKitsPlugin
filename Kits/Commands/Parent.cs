@@ -5,6 +5,7 @@ namespace ExiledKitsPlugin.Commands;
 
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
 [CommandHandler(typeof(GameConsoleCommandHandler))]
+[CommandHandler(typeof(ClientCommandHandler))]
 public class Parent : ParentCommand
 {
     public Parent() => LoadGeneratedCommands();

@@ -32,11 +32,22 @@ public class Give : ICommand
             return false;
         }
 
-        int.TryParse(arguments.At(0), out var usernetid);
-        ReferenceHub refPlayer = ReferenceHub.GetHub(usernetid);
+        ReferenceHub refPlayer = null;
+        if (int.TryParse(arguments.At(0), out var usernetid))
+        {
+            refPlayer = ReferenceHub.GetHub(usernetid);
+        }
+        else
+        {
+            if (Player.TryGet(arguments.At(0), out Player player))
+            {
+                refPlayer = ReferenceHub.GetHub(player.GameObject);
+            }
+        }
+        
         if (refPlayer == null)
         {
-            response = "incorrect userid";
+            response = "Player could not be found by name or id.";
             return false;
         }
 
@@ -54,7 +65,7 @@ public class Give : ICommand
                 response = "This kit is not enabled and cannot be redeemed.";
                 return false;
             }
-
+            
             if (kit.UsePermission)
             {
                 // When kit use permission is enabled, check if sender can give this kit
@@ -65,9 +76,23 @@ public class Give : ICommand
                     return false;
                 }
             }
+            
+            /*if (kit.CooldownInSeconds > -1f)
+            {
+                if (Plugin.Instance.kitCooldownManager.IsKitEntryOnCooldown(kit,Player.Get(refPlayer)) && !sender.CheckPermission("kits.givecooldownbypass"))
+                {
+                    response = $"This kit is on cooldown for {Plugin.Instance.kitCooldownManager.GetTimeLeft(kit, Player.Get(refPlayer)).ToString()}";
+                    return false;
+                }
+            }*/
+            
             Player player = Player.Get(refPlayer);
             Plugin.Instance.kitManager.GiveKitContents(player, kit);
             response = $"Gave kit {kit.Name} to {player.Nickname}";
+            /*if (kit.CooldownInSeconds > -1)
+            {
+                Plugin.Instance.kitCooldownManager.StartKitCooldown(kit,player,kit.CooldownInSeconds);
+            }*/
             return true;
         }
         

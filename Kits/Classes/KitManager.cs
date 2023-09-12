@@ -45,10 +45,10 @@ public class KitManager
 
     public string FormattedKitContentList(KitEntry kit)
     {
-        string formatted = $"<size=125%><color=#32CD32># {kit.Name} (Enabled: {kit.Enabled}) contents:</color></size>\n";
+        string formatted = $"<color=#32CD32># {kit.Name} (Enabled: {kit.Enabled}) contents:</color>\n";
         if (kit.Items != null)
         {
-            formatted += "<size=110%><color=#DC143C># Items:</color></size>\n";
+            formatted += "<color=#DC143C># Items:</color>\n";
             foreach (var item in kit.Items)
             {
                 formatted += $"-{item.ToString()}\n";
@@ -57,7 +57,7 @@ public class KitManager
 
         if (kit.Ammo != null)
         {
-            formatted += "<size=110%><color=#DC143C># Ammo:</color></size>\n";
+            formatted += "<color=#DC143C># Ammo:</color>\n";
             foreach (var ammo in kit.Ammo)
             {
                 formatted += $"-({ammo.Value}x) {ammo.Key.ToString()}\n";
@@ -66,7 +66,7 @@ public class KitManager
 
         if (kit.Effects != null)
         {
-            formatted += "<size=110%><color=#DC143C># Effects:</color></size>\n";
+            formatted += "<color=#DC143C># Effects:</color>\n";
             foreach (var effect in kit.Effects)
             {
                 formatted += $"-({effect.Intensity}x) {effect.Type.ToString()} {effect.Duration}s\n";
@@ -77,7 +77,7 @@ public class KitManager
 
     public KitEntry GetKitEntryFromName(string name)
     {
-        KitEntry kitEntry = null;
+        KitEntry kitEntry;
         try
         {
             kitEntry = KitEntries.First(x => x.Name == name);
