@@ -25,6 +25,7 @@ kits:
   - name: 'example'
     enabled: true
     use_permission: false
+    cooldown_in_seconds: 60
     items:
     - Medkit
     - Coin
@@ -43,11 +44,13 @@ kits:
 
 ## Permissions
 
-kits.give, kits.give.(kit name if usepermission is true),  kits.enable, kits.disable, kits.delete (deleting doesnt save to config for now), kits.givebypass (to bypass giving kits if the kit is not enabled)
+- kits.give, kits.give.(kit name if usepermission is true),
+- kits.enable, kits.disable,
+- kits.delete,
+- kits.givebypass (if disabled), kits.give.cooldownbypass 
 
 ## TO-DO
 
-- Cooldowns
 - Saving kit configuration changes to file
 - In-game kit editing
 
