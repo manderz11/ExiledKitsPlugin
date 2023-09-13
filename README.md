@@ -45,6 +45,12 @@ kits:
 
 kits.give, kits.give.(kit name if usepermission is true),  kits.enable, kits.disable, kits.delete (deleting doesnt save to config for now), kits.givebypass (to bypass giving kits if the kit is not enabled)
 
+## TO-DO
+
+- Cooldowns
+- Saving kit configuration changes to file
+- In-game kit editing
+
 ## Support
 
 Support for the plugin can only be found on the [issues](https://github.com/manderz11/ExiledKitsPlugin/issues) tab or by messaging me on discord (@manderz11)
