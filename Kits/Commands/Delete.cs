@@ -25,21 +25,21 @@ public class Delete : ICommand
             return false;
         }
 
-        if (Plugin.Instance.kitManager == null)
+        if (Plugin.Instance.KitManager == null)
         {
             response = "Internal error. (Kit manager instance is null)";
             return false;
         }
 
-        if (Plugin.Instance.kitManager.GetKitEntryFromName(arguments.At(0)) == null)
+        if (Plugin.Instance.KitManager.GetKitEntryFromName(arguments.At(0)) == null)
         {
             response = "Could not find kit to delete with this name.";
             return false;
         }
 
-        KitEntry kit = Plugin.Instance.kitManager.GetKitEntryFromName(arguments.At(0));
+        KitEntry kit = Plugin.Instance.KitManager.GetKitEntryFromName(arguments.At(0));
 
-        if (Plugin.Instance.kitManager.DeleteKit(kit))
+        if (Plugin.Instance.KitManager.DeleteKit(kit))
         {
             response = "Kit successfully deleted";
             return true;

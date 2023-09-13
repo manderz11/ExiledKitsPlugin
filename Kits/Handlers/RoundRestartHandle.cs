@@ -1,4 +1,4 @@
-﻿/*using Exiled.Events.EventArgs.Server;
+﻿using Exiled.Events.EventArgs.Server;
 using ExiledKitsPlugin.Classes;
 
 namespace ExiledKitsPlugin.Handlers;
@@ -9,7 +9,7 @@ public class RoundRestartHandle
     {
         if (Plugin.Instance.Config.ResetCooldownsOnRoundEnd)
         {
-            Plugin.Instance.kitCooldownManager = new KitCooldownManager();
+            Plugin.Instance.KitCooldownManager = new KitCooldownManager();
         }
     }
-}*/
+}

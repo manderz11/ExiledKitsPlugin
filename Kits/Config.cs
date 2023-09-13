@@ -22,7 +22,7 @@ namespace ExiledKitsPlugin
             new KitEntry()
                 { Name = "itemdemo", UsePermission = false, Ammo = null, Effects = null, Enabled = true, Items = new List<ItemType>() { ItemType.Coin, ItemType.Adrenaline }, CooldownInSeconds = 1800f},
             new KitEntry()
-                { Name = "ammodemo", UsePermission = false, Ammo = new Dictionary<AmmoType, ushort>() { { AmmoType.Nato9, 30}, { AmmoType.Nato556, 5}}, Effects = null, Enabled = true, Items = new List<ItemType>() { ItemType.GunCOM15, ItemType.Flashlight }, CooldownInSeconds = 60f},
+                { Name = "ammodemo", UsePermission = true, Ammo = new Dictionary<AmmoType, ushort>() { { AmmoType.Nato9, 30}, { AmmoType.Nato556, 5}}, Effects = null, Enabled = true, Items = new List<ItemType>() { ItemType.GunCOM15, ItemType.Flashlight }, CooldownInSeconds = 60f},
             new KitEntry()
                 { Name = "effectdemo", UsePermission = false, Ammo = new Dictionary<AmmoType, ushort>() { { AmmoType.Nato9, 60}, { AmmoType.Nato556, 15}}, Effects = new List<Effect>(){new Effect(EffectType.Scp207, 120f, 2), new Effect(EffectType.MovementBoost,120f,50)}, Enabled = true, Items = new List<ItemType>() { ItemType.GunFSP9, ItemType.Medkit }, CooldownInSeconds = -1f}
         };

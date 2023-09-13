@@ -1,4 +1,4 @@
-﻿/*using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Exiled.API.Features;
 using MEC;
 
@@ -6,120 +6,97 @@ namespace ExiledKitsPlugin.Classes;
 
 public class KitCooldownManager
 {
-    private Dictionary<Player, List<CooldownEntry>> _kitEntryCooldowns = new Dictionary<Player, List<CooldownEntry>>();
-
+    public List<CooldownEntry> CooldownEntries = new List<CooldownEntry>();
+    
     public bool IsKitEntryOnCooldown(KitEntry kitEntry, Player player)
     {
-        if (kitEntry.CooldownInSeconds <= -1)
+        if (CooldownEntries == null)
         {
             return false;
         }
 
-        if (!_kitEntryCooldowns.ContainsKey(player))
+        CooldownEntry cooldownEntry = CooldownEntries.Find(x => x.Kit == kitEntry && x.Player == player);
+        if (cooldownEntry == null)
         {
             return false;
         }
 
-        if (_kitEntryCooldowns.TryGetValue(player, out List<CooldownEntry> cooldownEntries))
+        if (cooldownEntry.RemainingTime <= 0)
         {
-            foreach (var entry in cooldownEntries)
-            {
-                if (entry.KitEntry == kitEntry)
-                {
-                    if (entry.TimeLeft > 0f)
-                    {
-                        return true;
-                    }
-                }
-            }
-
+            CooldownEntries.Remove(cooldownEntry);
             return false;
         }
-        else
-        {
-            return false;
-        }
+        
+        return true;
     }
 
     public void StartKitCooldown(KitEntry kitEntry, Player player, float time)
     {
-        if (_kitEntryCooldowns.TryGetValue(player, out List<CooldownEntry> cooldownEntries))
+        CooldownEntry cooldownEntry = GetCooldownEntry(player, kitEntry);
+        if (cooldownEntry == null)
         {
-            foreach (var entry in cooldownEntries)
-            {
-                if (entry.KitEntry == kitEntry)
-                {
-                    
-                    cooldownEntries.Remove(entry);
-                    CooldownEntry cooldownEntry = new CooldownEntry() { KitEntry = kitEntry };
-                    Timing.RunCoroutine(cooldownEntry.CooldownCountdown(time));
-                    cooldownEntries.Add(cooldownEntry);
-                    _kitEntryCooldowns.Remove(player);
-                    _kitEntryCooldowns.Add(player,cooldownEntries);
-                    return;
-                    
-                }
-            }
+            CooldownEntry kitCooldownEntry = new CooldownEntry(player, kitEntry, time);
+            CooldownEntries.Add(kitCooldownEntry);
+            return;
         }
-        else
+
+        if (cooldownEntry.RemainingTime <= 0)
         {
-            CooldownEntry cooldownEntry = new CooldownEntry() {KitEntry = kitEntry};
-            Timing.RunCoroutine(cooldownEntry.CooldownCountdown(time));
-            _kitEntryCooldowns.Add(player,new List<CooldownEntry>(){cooldownEntry});
+            CooldownEntries.Remove(cooldownEntry);
+            CooldownEntry kitCooldownEntry = new CooldownEntry(player, kitEntry, time);
+            CooldownEntries.Add(kitCooldownEntry);
         }
     }
 
     public float GetTimeLeft(KitEntry kitEntry, Player player)
     {
-        if (kitEntry.CooldownInSeconds <= -1f)
+        if (CooldownEntries == null)
         {
             return -1f;
         }
 
-        if (!_kitEntryCooldowns.ContainsKey(player))
+        if (!IsKitEntryOnCooldown(kitEntry,player))
         {
             return -1f;
         }
 
-        if (_kitEntryCooldowns.TryGetValue(player, out List<CooldownEntry> cooldownEntries))
-        {
-            foreach (var entry in cooldownEntries)
-            {
-                if (entry.KitEntry == kitEntry)
-                {
-                    if (Plugin.Instance.Config.Debug)
-                    {
-                        Log.Debug($"timeleft {entry.TimeLeft} on kit {entry.KitEntry.Name}");
-                    }
-                    return entry.TimeLeft;
-                }
-            }
+        CooldownEntry cooldownEntry = CooldownEntries.Find(x => x.Player == player && x.Kit == kitEntry);
+        return cooldownEntry.RemainingTime;
+    }
 
-            return -1f;
-        }
-        else
-        {
-            return -1f;
-        }
+    public CooldownEntry GetCooldownEntry(Player player, KitEntry kitEntry)
+    {
+        CooldownEntry cooldownEntry = CooldownEntries.Find(x => x.Player == player && x.Kit == kitEntry);
+        return cooldownEntry;
     }
 }
 
 public class CooldownEntry
 {
-    public KitEntry KitEntry;
-    public float TimeLeft;
-
-    public IEnumerator<float> CooldownCountdown(float time)
+    public CooldownEntry(Player player, KitEntry kitEntry, float cooldownDuration)
     {
-        TimeLeft = time;
-        while (TimeLeft > 0f)
+        Player = player;
+        Kit = kitEntry;
+        RemainingTime = cooldownDuration;
+        Timing.RunCoroutine(ReduceTime());
+    }
+
+    public CooldownEntry(Player player, KitEntry kitEntry)
+    {
+        Player = player;
+        Kit = kitEntry;
+    }
+
+    public KitEntry Kit;
+    public Player Player;
+    public float RemainingTime { get; private set; }
+
+    public IEnumerator<float> ReduceTime()
+    {
+        while (RemainingTime > 0)
         {
-            TimeLeft -= 1f;
-            if (Plugin.Instance.Config.Debug)
-            {
-                Log.Debug($"{time} is timeleft on kit {KitEntry.Name}");
-            }
+            RemainingTime -= 1;
             yield return Timing.WaitForSeconds(1);
         }
     }
-}*/
+}

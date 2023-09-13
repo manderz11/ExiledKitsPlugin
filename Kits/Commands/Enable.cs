@@ -25,19 +25,19 @@ public class Enable : ICommand
             return false;
         }
 
-        if (Plugin.Instance.kitManager == null)
+        if (Plugin.Instance.KitManager == null)
         {
             response = "Internal error. (Kit manager instance is null)";
             return false;
         }
 
-        if (Plugin.Instance.kitManager.GetKitEntryFromName(arguments.At(0)) == null)
+        if (Plugin.Instance.KitManager.GetKitEntryFromName(arguments.At(0)) == null)
         {
             response = "Could not find kit to enable with this name.";
             return false;
         }
 
-        KitEntry kit = Plugin.Instance.kitManager.GetKitEntryFromName(arguments.At(0));
+        KitEntry kit = Plugin.Instance.KitManager.GetKitEntryFromName(arguments.At(0));
         kit.Enabled = true;
         response = "Kit enabled!";
         return true;

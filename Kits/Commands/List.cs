@@ -14,7 +14,7 @@ public class List : ICommand
 
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
-        if (!sender.CheckPermission("kits.list"))
+        if (!((CommandSender)sender).CheckPermission("kits.list"))
         {
             response = "You do not have permission (kits.list) to execute this command.";
             return false;
@@ -26,25 +26,25 @@ public class List : ICommand
             return false;
         }
 
-        if (Plugin.Instance.kitManager == null)
+        if (Plugin.Instance.KitManager == null)
         {
             response = "Internal error. (Kit manager instance is null)";
             return false;
         }
 
-        if (Plugin.Instance.kitManager.KitEntries == null)
+        if (Plugin.Instance.KitManager.KitEntries == null)
         {
             response = "Internal error. (Kit manager kit entries are null)";
             return false;
         }
 
-        if (Plugin.Instance.kitManager.KitEntries.Count > 0)
+        if (Plugin.Instance.KitManager.KitEntries.Count > 0)
         {
-            List<KitEntry> kitEntries = Plugin.Instance.kitManager.KitEntries;
+            List<KitEntry> kitEntries = Plugin.Instance.KitManager.KitEntries;
             string listResponse = "List of kits:\n";
             foreach (var entry in kitEntries)
             {
-                listResponse += Plugin.Instance.kitManager.FormattedKitContentList(entry);
+                listResponse += Plugin.Instance.KitManager.FormattedKitContentList(entry);
             }
             
             response = listResponse;
