@@ -3,6 +3,7 @@ using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 using ExiledKitsPlugin.Classes;
+using PlayerRoles;
 
 namespace ExiledKitsPlugin.Commands;
 
@@ -108,6 +109,27 @@ public class Give : ICommand
                     response = $"This kit is on cooldown for {cooldownEntry.RemainingTime}s";
                     return false;
                 }
+            }
+        }
+
+        if (kit.WhitelistedRoles != null)
+        {
+            if (!kit.WhitelistedRoles.Contains(player.Role))
+            {
+                response = $"This player may not recieve this kit as {player.Role.Name}";
+                return false;
+            }
+        }
+        
+        if (kit.OverrideInventory == true)
+        {
+            if (kit.DropOverridenItems)
+            {
+                player.DropItems();
+            }
+            else
+            {
+                player.ClearInventory(true);
             }
         }
         

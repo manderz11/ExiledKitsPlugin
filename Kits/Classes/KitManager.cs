@@ -46,6 +46,7 @@ public class KitManager
     public string FormattedKitContentList(KitEntry kit)
     {
         string formatted = $"<color=#32CD32># {kit.Name} (Enabled: {kit.Enabled}) contents:</color>\n";
+        formatted += $"<color=#FFFFFF># Settings: Enabled: {kit.Enabled} Override inventory: {kit.OverrideInventory} Drop overriden items: {kit.DropOverridenItems}</color>\n";
         if (kit.Items != null)
         {
             formatted += "<color=#DC143C># Items:</color>\n";
