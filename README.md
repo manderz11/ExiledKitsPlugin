@@ -26,6 +26,9 @@ kits:
     enabled: true
     use_permission: false
     cooldown_in_seconds: 60
+    whitelisted_roles:
+    override_inventory: false
+    drop_overriden_items: false
     items:
     - Medkit
     - Coin
