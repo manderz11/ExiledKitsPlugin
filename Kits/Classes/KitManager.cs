@@ -39,7 +39,8 @@ public class KitManager
         }
         if (kit.Effects != null)
         {
-            player.EnableEffects(kit.Effects);
+            //player.EnableEffects(kit.Effects); obsolete as of exiled 8.3.x
+            player.SyncEffects(kit.Effects);
         }
     }
 
