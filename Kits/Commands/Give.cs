@@ -170,7 +170,7 @@ public class Kit : ICommand
             return false;
         }
 
-        var kitNameArg = arguments.At(1);
+        var kitNameArg = arguments.At(0);
         if (Plugin.Instance.KitManager.GetKitEntryFromName(kitNameArg) == null)
         {
             response = "Kit with specified name could not be found";
@@ -204,8 +204,9 @@ public class Kit : ICommand
             response = "<color=red>ERROR: Kit entry is null even though that should be impossible?!?!</color>";
             return false;
         }
-
+        
         Player player;
+        
         try
         {
             player = Player.Get(sender);
