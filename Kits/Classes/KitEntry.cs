@@ -13,10 +13,16 @@ namespace ExiledKitsPlugin.Classes
         public bool Enabled { get; set; }
         [Description("Should the kit be permissions based")]
         public bool UsePermission { get; set; }
-        [Description("Initial cooldown of the kit")]
+        [Description("Initial cooldown of the kit after player spawn, set to 0 to disable")]
         [CanBeNull]public float InitialCooldown { get; set; }
-        [Description("Kit re-use cooldown in seconds set to -1 to disable")]
+        [Description("Initial cooldown of the kit after game start, set to 0 to disable")]
+        [CanBeNull]public float InitialGlobalCooldown { get; set; }
+        [Description("Time after game start to timeout kit (disable redeeming), set to 0 to disable")]
+        [CanBeNull]public float GlobalKitTimeout { get; set; }
+        [Description("Kit re-use cooldown in seconds, set to 0 to disable")]
         public float CooldownInSeconds { get; set; }
+        [Description("Maximum number of uses per game, set to 0 to disable")]
+        public int MaxUses { get; set; }
         [Description("Allowed roles to redeem kit")]
         [CanBeNull]public List<RoleTypeId> WhitelistedRoles { get; set; }
         [Description("Should kit delete existing inventory items")]

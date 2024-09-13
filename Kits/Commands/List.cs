@@ -26,25 +26,25 @@ public class List : ICommand
             return false;
         }
 
-        if (Plugin.Instance.KitManager == null)
+        if (Plugin.Instance.KitEntryManager == null)
         {
             response = "Internal error. (Kit manager instance is null)";
             return false;
         }
 
-        if (Plugin.Instance.KitManager.KitEntries == null)
+        if (Plugin.Instance.KitEntryManager.KitEntries == null)
         {
             response = "Internal error. (Kit manager kit entries are null)";
             return false;
         }
 
-        if (Plugin.Instance.KitManager.KitEntries.Count > 0)
+        if (Plugin.Instance.KitEntryManager.KitEntries.Count > 0)
         {
-            List<KitEntry> kitEntries = Plugin.Instance.KitManager.KitEntries;
+            List<KitEntry> kitEntries = Plugin.Instance.KitEntryManager.KitEntries;
             string listResponse = "List of kits:\n";
             foreach (var entry in kitEntries)
             {
-                listResponse += Plugin.Instance.KitManager.FormattedKitContentList(entry);
+                listResponse += Plugin.Instance.KitEntryManager.FormattedKitContentList(entry);
             }
             
             response = listResponse;

@@ -5,10 +5,13 @@ using ExiledKitsPlugin.Handlers;
 
 namespace ExiledKitsPlugin
 {
-    /* TODO as of 1.0.7
-    1. initial kit cooldowns
-    2. giving without using kit parent command
-    3. probably some refactoring of a year old code
+    /* TODO for 1.1.0, as of 1.0.6/1.0.7-pre
+    1. initial kit cooldowns -- done
+    2. giving without using kit parent command -- done
+    3. probably some refactoring of a year old code -- in progress
+    4. global kit cooldown
+    5. kit timeout cooldown
+    6. max kit uses -- done
      */
     public class Plugin : Plugin<Config>
     {
@@ -16,16 +19,16 @@ namespace ExiledKitsPlugin
         public override string Author => "manderz11";
         public override Version Version => new Version(1, 0, 7);
         public static Plugin Instance { get; set; }
+        public KitEntryManager KitEntryManager;
         public KitManager KitManager;
-        public KitCooldownManager KitCooldownManager;
         private Handlers.Handlers _handlers;
         
         public override void OnEnabled()
         {
             Instance = this;
+            KitEntryManager = new KitEntryManager();
+            KitEntryManager.KitEntries = Config.Kits;
             KitManager = new KitManager();
-            KitManager.KitEntries = Config.Kits;
-            KitCooldownManager = new KitCooldownManager();
             RegisterEvents();
             base.OnEnabled();
         }
@@ -33,8 +36,8 @@ namespace ExiledKitsPlugin
         public override void OnDisabled()
         {
             Instance = null;
+            KitEntryManager = null;
             KitManager = null;
-            KitCooldownManager = null;
             UnregisterEvents();
             base.OnDisabled();
         }
@@ -49,12 +52,14 @@ namespace ExiledKitsPlugin
             _handlers = new Handlers.Handlers();
             Exiled.Events.Handlers.Server.RoundEnded += _handlers.OnRoundEnded;
             Exiled.Events.Handlers.Player.Spawned += _handlers.SpawnedEvent;
+            Exiled.Events.Handlers.Server.RoundStarted += _handlers.RoundStarted;
         }
 
         void UnregisterEvents()
         {
             Exiled.Events.Handlers.Server.RoundEnded -= _handlers.OnRoundEnded;
             Exiled.Events.Handlers.Player.Spawned -= _handlers.SpawnedEvent;
+            Exiled.Events.Handlers.Server.RoundStarted -= _handlers.RoundStarted;
             _handlers = null;
         }
     }

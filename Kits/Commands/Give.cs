@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
@@ -20,20 +21,20 @@ public class Give : ICommand
             return false;
         }
 
-        if (Plugin.Instance.KitManager == null)
+        if (Plugin.Instance.KitEntryManager == null)
         {
             response = "Internal error. (Kit manager instance is null)";
             return false;
         }
 
         var kitNameArg = arguments.At(1);
-        if (Plugin.Instance.KitManager.GetKitEntryFromName(kitNameArg) == null)
+        if (Plugin.Instance.KitEntryManager.GetKitEntryFromName(kitNameArg) == null)
         {
             response = "Kit with specified name could not be found";
             return false;
         }
         
-        KitEntry kit = Plugin.Instance.KitManager.GetKitEntryFromName(kitNameArg);
+        KitEntry kit = Plugin.Instance.KitEntryManager.GetKitEntryFromName(kitNameArg);
         if (kit != null)
         {
             // When kit use permission is enabled, check if sender can give this kit
@@ -85,26 +86,16 @@ public class Give : ICommand
             response = "This kit is not enabled and cannot be redeemed.";
             return false;
         }
-            
-        /*if (kit.UsePermission) -- redundant usage???
-        {
-            
-            if (!((CommandSender)sender).CheckPermission($"kits.give.{kit.Name}"))
-            {
-                response = $"You do not have permission (kits.give.{kit.Name}) to give this kit";
-                return false;
-            }
-        }*/
 
         player = Player.Get(refPlayer);
         
-        if (kit.CooldownInSeconds > -1f)
+        if (kit.CooldownInSeconds > -1f || kit.InitialCooldown > -1f)
         {
-            if (Plugin.Instance.KitCooldownManager.IsKitEntryOnCooldown(kit,player))
+            if (Plugin.Instance.KitManager.IsKitEntryOnCooldown(kit,player))
             {
                 if (!((CommandSender)sender).CheckPermission("kits.give.cooldownbypass"))
                 {
-                    CooldownEntry cooldownEntry = Plugin.Instance.KitCooldownManager.GetCooldownEntry(player, kit);
+                    CooldownEntry cooldownEntry = Plugin.Instance.KitManager.GetCooldownEntry(player, kit);
                     response = $"This kit is on cooldown for {cooldownEntry.RemainingTime}s";
                     return false;
                 }
@@ -132,14 +123,37 @@ public class Give : ICommand
             }
         }
         
-        Plugin.Instance.KitManager.GiveKitContents(player, kit);
+        if (kit.MaxUses > 0)
+        {
+            if (Plugin.Instance.KitManager.KitUses.TryGetValue(new Dictionary<Player, KitEntry>(){{player,kit}},out int uses))
+            {
+                if (uses > kit.MaxUses)
+                {
+                    if (!player.CheckPermission("kits.givebypass"))
+                    {
+                        response = $"You have already used this kit {uses} times. You cannot use it more than {kit.MaxUses} times.";
+                        return false;
+                    }
+                }
+                else
+                {
+                    Plugin.Instance.KitManager.KitUses[new Dictionary<Player, KitEntry>(){{player,kit}}] += 1;
+                }
+            }
+            else
+            {
+                Plugin.Instance.KitManager.KitUses.Add(new Dictionary<Player, KitEntry>(){{player,kit}},1);
+            }
+        }
+        
+        Plugin.Instance.KitEntryManager.GiveKitContents(player, kit);
         response = $"Gave kit {kit.Name} to {player.Nickname}";
 
         if (!((CommandSender)sender).CheckPermission("kits.give.cooldownbypass"))
         {
-            if (kit.CooldownInSeconds > -1f)
+            if (kit.CooldownInSeconds > -1f || kit.InitialCooldown > -1f)
             {
-                Plugin.Instance.KitCooldownManager.StartKitCooldown(kit, player, kit.CooldownInSeconds);
+                Plugin.Instance.KitManager.StartKitCooldown(kit, player, kit.CooldownInSeconds);
             }
         }
         
@@ -164,20 +178,20 @@ public class Kit : ICommand
             return false;
         }
         
-        if (Plugin.Instance.KitManager == null)
+        if (Plugin.Instance.KitEntryManager == null)
         {
             response = "Internal error. (Kit manager instance is null)";
             return false;
         }
 
         var kitNameArg = arguments.At(0);
-        if (Plugin.Instance.KitManager.GetKitEntryFromName(kitNameArg) == null)
+        if (Plugin.Instance.KitEntryManager.GetKitEntryFromName(kitNameArg) == null)
         {
             response = "Kit with specified name could not be found";
             return false;
         }
         
-        KitEntry kit = Plugin.Instance.KitManager.GetKitEntryFromName(kitNameArg);
+        KitEntry kit = Plugin.Instance.KitEntryManager.GetKitEntryFromName(kitNameArg);
         
         if (kit != null)
         {
@@ -223,24 +237,14 @@ public class Kit : ICommand
             response = "This kit is not enabled and cannot be redeemed.";
             return false;
         }
-            
-        /*if (kit.UsePermission) -- redundant usage???
-        {
-            
-            if (!((CommandSender)sender).CheckPermission($"kits.give.{kit.Name}"))
-            {
-                response = $"You do not have permission (kits.give.{kit.Name}) to give this kit";
-                return false;
-            }
-        }*/
         
-        if (kit.CooldownInSeconds > -1f)
+        if (kit.CooldownInSeconds > -1f || kit.InitialCooldown > -1f)
         {
-            if (Plugin.Instance.KitCooldownManager.IsKitEntryOnCooldown(kit,player))
+            if (Plugin.Instance.KitManager.IsKitEntryOnCooldown(kit,player))
             {
                 if (!((CommandSender)sender).CheckPermission("kits.give.cooldownbypass"))
                 {
-                    CooldownEntry cooldownEntry = Plugin.Instance.KitCooldownManager.GetCooldownEntry(player, kit);
+                    CooldownEntry cooldownEntry = Plugin.Instance.KitManager.GetCooldownEntry(player, kit);
                     response = $"This kit is on cooldown for {cooldownEntry.RemainingTime}s";
                     return false;
                 }
@@ -267,15 +271,38 @@ public class Kit : ICommand
                 player.ClearInventory(true);
             }
         }
+
+        if (kit.MaxUses > 0)
+        {
+            if (Plugin.Instance.KitManager.KitUses.TryGetValue(new Dictionary<Player, KitEntry>(){{player,kit}},out int uses))
+            {
+                if (uses > kit.MaxUses)
+                {
+                    if (!player.CheckPermission("kits.givebypass"))
+                    {
+                        response = $"You have already used this kit {uses} times. You cannot use it more than {kit.MaxUses} times.";
+                        return false;
+                    }
+                }
+                else
+                {
+                    Plugin.Instance.KitManager.KitUses[new Dictionary<Player, KitEntry>(){{player,kit}}] += 1;
+                }
+            }
+            else
+            {
+                Plugin.Instance.KitManager.KitUses.Add(new Dictionary<Player, KitEntry>(){{player,kit}},1);
+            }
+        }
         
-        Plugin.Instance.KitManager.GiveKitContents(player, kit);
+        Plugin.Instance.KitEntryManager.GiveKitContents(player, kit);
         response = $"Gave kit {kit.Name} to you!";
 
         if (!((CommandSender)sender).CheckPermission("kits.give.cooldownbypass"))
         {
-            if (kit.CooldownInSeconds > -1f)
+            if (kit.CooldownInSeconds > -1f || kit.InitialCooldown > -1f)
             {
-                Plugin.Instance.KitCooldownManager.StartKitCooldown(kit, player, kit.CooldownInSeconds);
+                Plugin.Instance.KitManager.StartKitCooldown(kit, player, kit.CooldownInSeconds);
             }
         }
         

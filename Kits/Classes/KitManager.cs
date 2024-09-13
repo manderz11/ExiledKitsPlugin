@@ -1,98 +1,117 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Exiled.API.Features;
+using MEC;
 
 namespace ExiledKitsPlugin.Classes;
 
 public class KitManager
 {
-    public List<KitEntry> KitEntries;
+    public List<CooldownEntry> CooldownEntries = new List<CooldownEntry>();
+    // just a slight optimisation if there aren't many entries with an initial cooldown
+    public List<KitEntry> InitialCooldownKitEntries = new List<KitEntry>();
 
-    public List<KitEntry> GetKitEntries()
-    {
-        return KitEntries;
-    }
+    public Dictionary<Dictionary<Player, KitEntry>, int> KitUses = new Dictionary<Dictionary<Player, KitEntry>, int>();
 
-    public bool DeleteKit(KitEntry kitEntry)
+    public KitManager()
     {
-        if (KitEntries.Contains(kitEntry))
+        foreach (var kitEntry in Plugin.Instance.KitEntryManager.KitEntries)
         {
-            KitEntries.Remove(kitEntry);
-            return true;
+            if (kitEntry.InitialCooldown > 0f)
+            {
+                InitialCooldownKitEntries.Add(kitEntry);
+            }
         }
-        return false;
     }
     
-    public void GiveKitContents(Player player, KitEntry kit)
+    public bool IsKitEntryOnCooldown(KitEntry kitEntry, Player player)
     {
-        if (kit.Items != null)
+        if (CooldownEntries == null)
         {
-            player.AddItem(kit.Items);
+            return false;
         }
-        if (kit.Ammo != null)
+
+        CooldownEntry cooldownEntry = CooldownEntries.Find(x => x.Kit == kitEntry && x.Player == player);
+        if (cooldownEntry == null)
         {
-            foreach (var entry in kit.Ammo)
-            {
-                player.AddAmmo(entry.Key, entry.Value);
-            }
+            return false;
         }
-        if (kit.Effects != null)
+
+        if (cooldownEntry.RemainingTime <= 0)
         {
-            //player.EnableEffects(kit.Effects); obsolete as of exiled 8.3.x
-            player.SyncEffects(kit.Effects);
+            CooldownEntries.Remove(cooldownEntry);
+            return false;
+        }
+        
+        return true;
+    }
+
+    public void StartKitCooldown(KitEntry kitEntry, Player player, float time)
+    {
+        CooldownEntry cooldownEntry = GetCooldownEntry(player, kitEntry);
+        if (cooldownEntry == null)
+        {
+            CooldownEntry kitCooldownEntry = new CooldownEntry(player, kitEntry, time);
+            CooldownEntries.Add(kitCooldownEntry);
+            return;
+        }
+
+        if (cooldownEntry.RemainingTime <= 0)
+        {
+            CooldownEntries.Remove(cooldownEntry);
+            CooldownEntry kitCooldownEntry = new CooldownEntry(player, kitEntry, time);
+            CooldownEntries.Add(kitCooldownEntry);
         }
     }
 
-    public string FormattedKitContentList(KitEntry kit)
+    public float GetTimeLeft(KitEntry kitEntry, Player player)
     {
-        string formatted = $"<color=#32CD32># {kit.Name} (Enabled: {kit.Enabled}) contents:</color>\n";
-        formatted += $"<color=#FFFFFF># Settings: Enabled: {kit.Enabled} Override inventory: {kit.OverrideInventory} Drop overriden items: {kit.DropOverridenItems}</color>\n";
-        if (kit.Items != null)
+        if (CooldownEntries == null)
         {
-            formatted += "<color=#DC143C># Items:</color>\n";
-            foreach (var item in kit.Items)
-            {
-                formatted += $"-{item.ToString()}\n";
-            }
+            return -1f;
         }
 
-        if (kit.Ammo != null)
+        if (!IsKitEntryOnCooldown(kitEntry,player))
         {
-            formatted += "<color=#DC143C># Ammo:</color>\n";
-            foreach (var ammo in kit.Ammo)
-            {
-                formatted += $"-({ammo.Value}x) {ammo.Key.ToString()}\n";
-            }
+            return -1f;
         }
 
-        if (kit.Effects != null)
-        {
-            formatted += "<color=#DC143C># Effects:</color>\n";
-            foreach (var effect in kit.Effects)
-            {
-                formatted += $"-({effect.Intensity}x) {effect.Type.ToString()} {effect.Duration}s\n";
-            }
-        }
-        return formatted;
+        CooldownEntry cooldownEntry = CooldownEntries.Find(x => x.Player == player && x.Kit == kitEntry);
+        return cooldownEntry.RemainingTime;
     }
 
-    public KitEntry GetKitEntryFromName(string name)
+    public CooldownEntry GetCooldownEntry(Player player, KitEntry kitEntry)
     {
-        KitEntry kitEntry;
-        try
-        {
-            kitEntry = KitEntries.First(x => x.Name == name);
-        }
-        catch (Exception e)
-        {
-            if (Plugin.Instance.Config.Debug)
-            {
-                Log.Debug($"Kit entry was not found, exception: {e}");
-            }
-            return null;
-        }
+        CooldownEntry cooldownEntry = CooldownEntries.Find(x => x.Player == player && x.Kit == kitEntry);
+        return cooldownEntry;
+    }
+}
 
-        return kitEntry;
+public class CooldownEntry
+{
+    public CooldownEntry(Player player, KitEntry kitEntry, float cooldownDuration)
+    {
+        Player = player;
+        Kit = kitEntry;
+        RemainingTime = cooldownDuration;
+        Timing.RunCoroutine(ReduceTime());
+    }
+
+    public CooldownEntry(Player player, KitEntry kitEntry)
+    {
+        Player = player;
+        Kit = kitEntry;
+    }
+
+    public KitEntry Kit;
+    public Player Player;
+    public float RemainingTime { get; private set; }
+
+    public IEnumerator<float> ReduceTime()
+    {
+        while (RemainingTime > 0)
+        {
+            RemainingTime -= 1;
+            yield return Timing.WaitForSeconds(1);
+        }
     }
 }

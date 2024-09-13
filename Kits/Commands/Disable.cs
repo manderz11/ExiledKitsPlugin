@@ -25,19 +25,19 @@ public class Disable : ICommand
             return false;
         }
 
-        if (Plugin.Instance.KitManager == null)
+        if (Plugin.Instance.KitEntryManager == null)
         {
             response = "Internal error. (Kit manager instance is null)";
             return false;
         }
 
-        if (Plugin.Instance.KitManager.GetKitEntryFromName(arguments.At(0)) == null)
+        if (Plugin.Instance.KitEntryManager.GetKitEntryFromName(arguments.At(0)) == null)
         {
             response = "Could not find kit to disable with this name.";
             return false;
         }
 
-        KitEntry kit = Plugin.Instance.KitManager.GetKitEntryFromName(arguments.At(0));
+        KitEntry kit = Plugin.Instance.KitEntryManager.GetKitEntryFromName(arguments.At(0));
         kit.Enabled = false;
         response = "Kit disabled!";
         return true;
