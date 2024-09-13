@@ -7,6 +7,19 @@ namespace ExiledKitsPlugin.Classes;
 public class KitCooldownManager
 {
     public List<CooldownEntry> CooldownEntries = new List<CooldownEntry>();
+    // just a slight optimisation if there aren't many entries with an initial cooldown
+    public List<KitEntry> InitialCooldownKitEntries = new List<KitEntry>();
+
+    public KitCooldownManager()
+    {
+        foreach (var kitEntry in Plugin.Instance.KitManager.KitEntries)
+        {
+            if (kitEntry.InitialCooldown > 0)
+            {
+                InitialCooldownKitEntries.Add(kitEntry);
+            }
+        }
+    }
     
     public bool IsKitEntryOnCooldown(KitEntry kitEntry, Player player)
     {

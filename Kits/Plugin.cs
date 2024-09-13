@@ -5,15 +5,20 @@ using ExiledKitsPlugin.Handlers;
 
 namespace ExiledKitsPlugin
 {
+    /* TODO as of 1.0.6
+    1. initial kit cooldowns
+    2. giving without using kit parent command
+    3. probably some refactoring of a year old code
+     */
     public class Plugin : Plugin<Config>
     {
         public override string Name => "Kits";
         public override string Author => "manderz11";
-        public override Version Version => new Version(1, 0, 5);
+        public override Version Version => new Version(1, 0, 6);
         public static Plugin Instance { get; set; }
         public KitManager KitManager;
         public KitCooldownManager KitCooldownManager;
-        private RoundRestartHandle RoundRestartHandle;
+        private Handlers.Handlers _handlers;
         
         public override void OnEnabled()
         {
@@ -41,14 +46,16 @@ namespace ExiledKitsPlugin
 
         void RegisterEvents()
         {
-            RoundRestartHandle = new RoundRestartHandle();
-            Exiled.Events.Handlers.Server.RoundEnded += RoundRestartHandle.OnRoundEnded;
+            _handlers = new Handlers.Handlers();
+            Exiled.Events.Handlers.Server.RoundEnded += _handlers.OnRoundEnded;
+            Exiled.Events.Handlers.Player.Spawned += _handlers.SpawnedEvent;
         }
 
         void UnregisterEvents()
         {
-            Exiled.Events.Handlers.Server.RoundEnded -= RoundRestartHandle.OnRoundEnded;
-            RoundRestartHandle = null;
+            Exiled.Events.Handlers.Server.RoundEnded -= _handlers.OnRoundEnded;
+            Exiled.Events.Handlers.Player.Spawned -= _handlers.SpawnedEvent;
+            _handlers = null;
         }
     }
 }

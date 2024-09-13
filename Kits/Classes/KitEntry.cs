@@ -11,8 +11,11 @@ namespace ExiledKitsPlugin.Classes
     {
         public string Name { get; set; }
         public bool Enabled { get; set; }
+        [Description("Should the kit be permissions based")]
         public bool UsePermission { get; set; }
-        [Description("Kit cooldown in seconds set to -1 to disable")]
+        [Description("Initial cooldown of the kit")]
+        [CanBeNull]public float InitialCooldown { get; set; }
+        [Description("Kit re-use cooldown in seconds set to -1 to disable")]
         public float CooldownInSeconds { get; set; }
         [Description("Allowed roles to redeem kit")]
         [CanBeNull]public List<RoleTypeId> WhitelistedRoles { get; set; }

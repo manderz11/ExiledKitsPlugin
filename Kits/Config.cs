@@ -27,7 +27,7 @@ namespace ExiledKitsPlugin
             new KitEntry()
                 { Name = "effectdemo", UsePermission = false, Ammo = new Dictionary<AmmoType, ushort>() { { AmmoType.Nato9, 60}, { AmmoType.Nato556, 15}}, Effects = new List<Effect>(){new Effect(EffectType.Scp207, 120f, 2), new Effect(EffectType.MovementBoost,120f,50)}, Enabled = true, OverrideInventory = true, DropOverridenItems = true, WhitelistedRoles = null, Items = new List<ItemType>() { ItemType.GunFSP9, ItemType.Medkit }, CooldownInSeconds = -1f},
             new KitEntry()
-                {Name = "ChaoticRevolt", UsePermission = true, OverrideInventory = true, DropOverridenItems = true, CooldownInSeconds = 30, Enabled = true, Items = new List<ItemType>(){ItemType.Adrenaline, ItemType.KeycardMTFOperative, ItemType.GunA7, ItemType.ArmorHeavy, ItemType.Medkit, ItemType.Medkit}, Ammo = new Dictionary<AmmoType, ushort>(){{AmmoType.Nato762, 120},
+                {Name = "ChaoticRevolt", UsePermission = true, OverrideInventory = true, DropOverridenItems = true,InitialCooldown = 20, CooldownInSeconds = 30, Enabled = true, Items = new List<ItemType>(){ItemType.Adrenaline, ItemType.KeycardMTFOperative, ItemType.GunA7, ItemType.ArmorHeavy, ItemType.Medkit, ItemType.Medkit}, Ammo = new Dictionary<AmmoType, ushort>(){{AmmoType.Nato762, 120},
                     { AmmoType.Nato556, 60}}, Effects = new List<Effect>(){new Effect(EffectType.Scp207, 0f, 3, false, true)}, WhitelistedRoles = new List<RoleTypeId>() {RoleTypeId.ClassD, RoleTypeId.ChaosConscript, RoleTypeId.ChaosMarauder, RoleTypeId.ChaosRepressor, RoleTypeId.ChaosRifleman}}
         };
         
