@@ -5,7 +5,7 @@ using ExiledKitsPlugin.Handlers;
 
 namespace ExiledKitsPlugin
 {
-    /* TODO as of 1.0.6
+    /* TODO as of 1.0.7
     1. initial kit cooldowns
     2. giving without using kit parent command
     3. probably some refactoring of a year old code
@@ -14,7 +14,7 @@ namespace ExiledKitsPlugin
     {
         public override string Name => "Kits";
         public override string Author => "manderz11";
-        public override Version Version => new Version(1, 0, 6);
+        public override Version Version => new Version(1, 0, 7);
         public static Plugin Instance { get; set; }
         public KitManager KitManager;
         public KitCooldownManager KitCooldownManager;
