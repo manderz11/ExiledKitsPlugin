@@ -30,7 +30,7 @@ public class KitEntryManager
     {
         if (kit.SetRole != RoleTypeId.None && kit.SetRole != null)
         {
-            player.Role.Set(kit.SetRole,SpawnReason.ForceClass,RoleSpawnFlags.None);
+            player.Role.Set((RoleTypeId)kit.SetRole,SpawnReason.ForceClass,RoleSpawnFlags.None);
         }
         if (kit.Items != null)
         {

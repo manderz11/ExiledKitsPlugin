@@ -14,11 +14,11 @@ namespace ExiledKitsPlugin.Classes
         [Description("Should the kit be permissions based")]
         public bool UsePermission { get; set; }
         [Description("Initial cooldown of the kit after player spawn, set to 0 to disable")]
-        [CanBeNull]public float InitialCooldown { get; set; }
+        public float InitialCooldown { get; set; }
         [Description("Initial cooldown of the kit after game start, set to 0 to disable")]
-        [CanBeNull]public float InitialGlobalCooldown { get; set; }
+        public int InitialGlobalCooldown { get; set; }
         [Description("Time after game start to timeout kit (disable redeeming), set to 0 to disable")]
-        [CanBeNull]public float GlobalKitTimeout { get; set; }
+        public int GlobalKitTimeout { get; set; }
         [Description("Kit re-use cooldown in seconds, set to 0 to disable")]
         public float CooldownInSeconds { get; set; }
         [Description("Maximum number of uses per game, set to 0 to disable")]
@@ -34,6 +34,6 @@ namespace ExiledKitsPlugin.Classes
         [CanBeNull] public List<ItemType> Items { get; set; }
         [CanBeNull] public Dictionary<AmmoType, ushort> Ammo { get; set; }
         [CanBeNull] public List<Effect> Effects { get; set; }
-        [CanBeNull] public RoleTypeId SetRole { get; set; }
+        [CanBeNull] public RoleTypeId? SetRole { get; set; }
     }
 }
