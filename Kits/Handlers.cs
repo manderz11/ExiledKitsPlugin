@@ -17,8 +17,6 @@ public class Handlers
         {
             Plugin.Instance.KitManager = new KitManager();
         }
-        /*Plugin.Instance.KitManager.GameRunning = false;
-        Plugin.Instance.KitManager.GameRunningTime = 0f;*/
     }
 
     public void SpawnedEvent(SpawnedEventArgs spawnedEventArgs)
@@ -47,8 +45,5 @@ public class Handlers
     {
         // clear round kit uses
         Plugin.Instance.KitManager.KitUseEntries = new List<KitUseEntry>();
-        // start round timer -- Round method has it I forgot to check it
-        /*Plugin.Instance.KitManager.GameRunning = true;
-        Timing.RunCoroutine(Plugin.Instance.KitManager.GameRunningTimer());*/
     }
 }

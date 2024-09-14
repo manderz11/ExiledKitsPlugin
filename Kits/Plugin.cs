@@ -5,20 +5,6 @@ using ExiledKitsPlugin.Handlers;
 
 namespace ExiledKitsPlugin
 {
-    /* TODO for 1.1.0, as of 1.0.6/1.0.7-pre
-    1. initial kit cooldowns -- done
-    2. giving without using kit parent command -- done
-    3. probably some refactoring of a year old code -- in progress
-    4. global kit cooldown -- done
-    5. kit timeout cooldown -- done
-    6. max kit uses -- done
-    7. blacklisted ktis though it would conflict with whitelisted in a way but is more covenient -- done
-    8. role setting -- done
-    9. change permissions to more appropriate permissions -- done
-    10. replace kitmanagers gamerunning with Round.ElapsedTime -- done
-    11. add timeout after spawn -- done
-    12. implement translations -- done
-     */
     public class Plugin : Plugin<Config, Translation>
     {
         public override string Name => "Kits";
@@ -47,11 +33,7 @@ namespace ExiledKitsPlugin
             UnregisterEvents();
             base.OnDisabled();
         }
-
-        /*public override void OnReloaded()
-        {
-            
-        }*/
+        
 
         void RegisterEvents()
         {

@@ -40,7 +40,6 @@ public class Give : ICommand
         KitEntry kit = Plugin.Instance.KitEntryManager.GetKitEntryFromName(kitNameArg);
         if (kit != null)
         {
-            // When kit use permission is enabled, check if sender can give this kit
             if (kit.UsePermission)
             {
                 if (!((CommandSender)sender).CheckPermission($"kits.give.{kit.Name}"))

@@ -11,11 +11,6 @@ public class KitEntryManager
 {
     public List<KitEntry> KitEntries;
 
-    /*public List<KitEntry> GetKitEntries() -- unused
-    {
-        return KitEntries;
-    }*/
-
     public bool DeleteKit(KitEntry kitEntry)
     {
         if (KitEntries.Contains(kitEntry))

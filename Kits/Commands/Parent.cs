@@ -10,7 +10,7 @@ public class Parent : ParentCommand
 {
     public Parent() => LoadGeneratedCommands();
     public override string Command { get; } = "kits";
-    public override string[] Aliases { get; } = null; //new[] { "kit" }; -- replaced for kit
+    public override string[] Aliases { get; } = null;
     public override string Description { get; } = "Kit parent command/help command";
     private static Translation Translation => Plugin.Instance.Translation;
 
