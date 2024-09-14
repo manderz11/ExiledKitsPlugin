@@ -13,6 +13,7 @@ public class Give : ICommand
     public string Command { get; } = "give";
     public string[] Aliases { get; } = new []{"givekit"};
     public string Description { get; } = "Gives a kit to a player";
+    private static Translation Translation => Plugin.Instance.Translation;
 
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
@@ -31,7 +32,8 @@ public class Give : ICommand
         var kitNameArg = arguments.At(1);
         if (Plugin.Instance.KitEntryManager.GetKitEntryFromName(kitNameArg) == null)
         {
-            response = "Kit with specified name could not be found";
+            //response = "Kit with specified name could not be found";
+            response = Translation.InvalidKitName;
             return false;
         }
         
@@ -43,7 +45,8 @@ public class Give : ICommand
             {
                 if (!((CommandSender)sender).CheckPermission($"kits.give.{kit.Name}"))
                 {
-                    response = $"You do not have permission to redeem this kit (kits.give.{kit.Name})";
+                    //response = $"You do not have permission to redeem this kit (kits.give.{kit.Name})";
+                    response = Translation.InvalidKitPermission.Replace("%permission%", $"kits.give.{kit.Name}");
                     return false;
                 }
             }
@@ -51,7 +54,8 @@ public class Give : ICommand
             {
                 if (!((CommandSender)sender).CheckPermission("kits.give"))
                 {
-                    response = "You do not have permission (kits.give) to execute this command.";
+                    //response = "You do not have permission (kits.give) to execute this command.";
+                    response = Translation.InvalidGivePermissions;
                     return false;
                 }
             }
@@ -84,7 +88,8 @@ public class Give : ICommand
         
         if (!kit.Enabled && !((CommandSender)sender).CheckPermission("kits.give.givebypass"))
         {
-            response = "This kit is not enabled and cannot be redeemed.";
+            //response = "This kit is not enabled and cannot be redeemed.";
+            response = Translation.KitNotEnabled;
             return false;
         }
 
@@ -96,7 +101,8 @@ public class Give : ICommand
             {
                 if (!player.CheckPermission("kits.give.givebypass"))
                 {
-                    response = "Kits cannot be redeemed before the round has started.";
+                    //response = "Kits cannot be redeemed before the round has started.";
+                    response = Translation.KitRoundStart;
                     return false;
                 }
             }
@@ -106,7 +112,8 @@ public class Give : ICommand
                 {
                     if (!player.CheckPermission("kits.give.givebypass"))
                     {
-                        response = "Kits cannot be redeemed before the round has started.";
+                        //response = "Kits cannot be redeemed before the round has started.";
+                        response = Translation.KitRoundStart;
                         return false;
                     }
                 }
@@ -120,7 +127,8 @@ public class Give : ICommand
                 if (!((CommandSender)sender).CheckPermission("kits.give.cooldownbypass"))
                 {
                     CooldownEntry cooldownEntry = Plugin.Instance.KitManager.GetCooldownEntry(player, kit);
-                    response = $"This kit is on cooldown for {cooldownEntry.RemainingTime}s";
+                    //response = $"This kit is on cooldown for {cooldownEntry.RemainingTime}s";
+                    response = Translation.KitCooldown.Replace("%cooldown%",cooldownEntry.RemainingTime.ToString());
                     return false;
                 }
             }
@@ -132,7 +140,8 @@ public class Give : ICommand
             {
                 if (!player.CheckPermission("kits.give.timeoutbypass"))
                 {
-                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
+                    //response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
+                    response = Translation.GlobalKitTimeout.Replace("%timeout%",kit.GlobalKitTimeout.ToString()).Replace("%runningtime%",Round.ElapsedTime.TotalSeconds.ToString());
                     return false;
                 }
             }
@@ -144,7 +153,8 @@ public class Give : ICommand
             {
                 if (!player.CheckPermission("kits.give.cooldownbypass"))
                 {
-                    response = $"This kit cannot be redeemed for {kit.InitialGlobalCooldown}s after the game has started. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
+                    //response = $"This kit cannot be redeemed for {kit.InitialGlobalCooldown}s after the game has started. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
+                    response = Translation.GlobalCooldown.Replace("%cooldown%",kit.InitialGlobalCooldown.ToString()).Replace("%runningtime%",Round.ElapsedTime.TotalSeconds.ToString());
                     return false;
                 }
             }
@@ -158,7 +168,8 @@ public class Give : ICommand
                 if (!player.CheckPermission("kits.give.timeoutbypass"))
                 {
                     if(Plugin.Instance.Config.Debug)Log.Debug($"Player spawn time: {Plugin.Instance.KitManager.PlayerSpawnTime[player]}s Timeout should be after {Plugin.Instance.KitManager.PlayerSpawnTime[player] + kit.SpawnKitTimeout}s. Current time: {Round.ElapsedTime.TotalSeconds}s");
-                    response = $"This kit cannot be redeemed after {kit.SpawnKitTimeout}s after spawning! You have been alive for: {Round.ElapsedTime.TotalSeconds - Plugin.Instance.KitManager.PlayerSpawnTime[player]}s";
+                    //response = $"This kit cannot be redeemed after {kit.SpawnKitTimeout}s after spawning! You have been alive for: {Round.ElapsedTime.TotalSeconds - Plugin.Instance.KitManager.PlayerSpawnTime[player]}s";
+                    response = Translation.SpawnKitTimeout.Replace("%timeout%",kit.SpawnKitTimeout.ToString()).Replace("%alive%",(Round.ElapsedTime.TotalSeconds - Plugin.Instance.KitManager.PlayerSpawnTime[player]).ToString());
                     return false;
                 }
             }
@@ -170,7 +181,8 @@ public class Give : ICommand
             {
                 if (!kit.WhitelistedRoles.Contains(player.Role))
                 {
-                    response = $"This player may not recieve this kit as {player.Role.Name}";
+                    //response = $"This player may not recieve this kit as {player.Role.Name}";
+                    response = Translation.RecieveRole.Replace("%role%", player.Role.Name);
                     return false;
                 }
             }
@@ -179,7 +191,8 @@ public class Give : ICommand
             {
                 if (kit.BlacklistedRoles.Contains(player.Role))
                 {
-                    response = $"This player may not recieve this kit as {player.Role.Name}";
+                    //response = $"This player may not recieve this kit as {player.Role.Name}";
+                    response = Translation.RecieveRole.Replace("%role%", player.Role.Name);
                     return false;
                 }
             }
@@ -207,7 +220,8 @@ public class Give : ICommand
                 {
                     if (!player.CheckPermission("kits.give.givebypass"))
                     {
-                        response = $"You have already used this kit {uses} times. You cannot use it more than {kit.MaxUses} times.";
+                        //response = $"You have already used this kit {uses} times. You cannot use it more than {kit.MaxUses} times.";
+                        response = Translation.MaxUses.Replace("%times%",uses.ToString()).Replace("%maxuses%",kit.MaxUses.ToString());
                         return false;
                     }
                 }
@@ -226,7 +240,8 @@ public class Give : ICommand
         }
         
         Plugin.Instance.KitEntryManager.GiveKitContents(player, kit);
-        response = $"Gave kit {kit.Name} to {player.Nickname}";
+        //response = $"Gave kit {kit.Name} to {player.Nickname}";
+        response = Translation.GiveKit.Replace("%kit%",kit.Name).Replace("%player%",player.Nickname);
 
         if (!((CommandSender)sender).CheckPermission("kits.give.cooldownbypass"))
         {
@@ -250,6 +265,7 @@ public class Kit : ICommand
     public string Command { get; } = "kit";
     public string[] Aliases { get; } = new[] { "claimkit" };
     public string Description { get; } = "Claims a kit";
+    private static Translation Translation => Plugin.Instance.Translation;
 
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
@@ -268,7 +284,8 @@ public class Kit : ICommand
         var kitNameArg = arguments.At(0);
         if (Plugin.Instance.KitEntryManager.GetKitEntryFromName(kitNameArg) == null)
         {
-            response = "Kit with specified name could not be found";
+            //response = "Kit with specified name could not be found";
+            response = Translation.InvalidKitName;
             return false;
         }
         
@@ -281,7 +298,8 @@ public class Kit : ICommand
             {
                 if (!((CommandSender)sender).CheckPermission($"kits.give.{kit.Name}"))
                 {
-                    response = $"You do not have permission to redeem this kit (kits.give.{kit.Name})";
+                    //response = $"You do not have permission to redeem this kit (kits.give.{kit.Name})";
+                    response = Translation.InvalidKitPermission.Replace("%permission%", $"kits.give.{kit.Name}");
                     return false;
                 }
             }
@@ -289,7 +307,8 @@ public class Kit : ICommand
             {
                 if (!((CommandSender)sender).CheckPermission("kits.give"))
                 {
-                    response = "You do not have permission (kits.give) to execute this command.";
+                    //response = "You do not have permission (kits.give) to execute this command.";
+                    response = Translation.InvalidGivePermissions;
                     return false;
                 }
             }
@@ -319,7 +338,8 @@ public class Kit : ICommand
             {
                 if (!player.CheckPermission("kits.give.givebypass"))
                 {
-                    response = "Kits cannot be redeemed before the round has started.";
+                    //response = "Kits cannot be redeemed before the round has started.";
+                    response = Translation.KitRoundStart;
                     return false;
                 }
             }
@@ -329,7 +349,8 @@ public class Kit : ICommand
                 {
                     if (!player.CheckPermission("kits.give.givebypass"))
                     {
-                        response = "Kits cannot be redeemed before the round has started.";
+                        //response = "Kits cannot be redeemed before the round has started.";
+                        response = Translation.KitRoundStart;
                         return false;
                     }
                 }
@@ -338,7 +359,8 @@ public class Kit : ICommand
         
         if (!kit.Enabled && !((CommandSender)sender).CheckPermission("kits.give.givebypass"))
         {
-            response = "This kit is not enabled and cannot be redeemed.";
+            //response = "This kit is not enabled and cannot be redeemed.";
+            response = Translation.KitNotEnabled;
             return false;
         }
         
@@ -349,7 +371,8 @@ public class Kit : ICommand
                 if (!((CommandSender)sender).CheckPermission("kits.give.cooldownbypass"))
                 {
                     CooldownEntry cooldownEntry = Plugin.Instance.KitManager.GetCooldownEntry(player, kit);
-                    response = $"This kit is on cooldown for {cooldownEntry.RemainingTime}s";
+                    //response = $"This kit is on cooldown for {cooldownEntry.RemainingTime}s";
+                    response = Translation.KitCooldown.Replace("%cooldown%",cooldownEntry.RemainingTime.ToString());
                     return false;
                 }
             }
@@ -361,7 +384,8 @@ public class Kit : ICommand
             {
                 if (!player.CheckPermission("kits.give.timeoutbypass"))
                 {
-                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
+                    //response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
+                    response = Translation.GlobalKitTimeout.Replace("%timeout%",kit.GlobalKitTimeout.ToString()).Replace("%runningtime%",Round.ElapsedTime.TotalSeconds.ToString());
                     return false;
                 }
             }
@@ -373,7 +397,8 @@ public class Kit : ICommand
             {
                 if (!player.CheckPermission("kits.give.cooldownbypass"))
                 {
-                    response = $"This kit cannot be redeemed for {kit.InitialGlobalCooldown}s after the game has started. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
+                    //response = $"This kit cannot be redeemed for {kit.InitialGlobalCooldown}s after the game has started. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
+                    response = Translation.GlobalCooldown.Replace("%cooldown%",kit.InitialGlobalCooldown.ToString()).Replace("%runningtime%",Round.ElapsedTime.TotalSeconds.ToString());
                     return false;
                 }
             }
@@ -387,7 +412,8 @@ public class Kit : ICommand
                 if (!player.CheckPermission("kits.give.timeoutbypass"))
                 {
                     if(Plugin.Instance.Config.Debug)Log.Debug($"Player spawn time: {Plugin.Instance.KitManager.PlayerSpawnTime[player]}s Timeout should be after {Plugin.Instance.KitManager.PlayerSpawnTime[player] + kit.SpawnKitTimeout}s. Current time: {Round.ElapsedTime.TotalSeconds}s");
-                    response = $"This kit cannot be redeemed after {kit.SpawnKitTimeout}s after spawning! You have been alive for: {Round.ElapsedTime.TotalSeconds - Plugin.Instance.KitManager.PlayerSpawnTime[player]}s";
+                    //response = $"This kit cannot be redeemed after {kit.SpawnKitTimeout}s after spawning! You have been alive for: {Round.ElapsedTime.TotalSeconds - Plugin.Instance.KitManager.PlayerSpawnTime[player]}s";
+                    response = Translation.SpawnKitTimeout.Replace("%timeout%",kit.SpawnKitTimeout.ToString()).Replace("%alive%",(Round.ElapsedTime.TotalSeconds - Plugin.Instance.KitManager.PlayerSpawnTime[player]).ToString());
                     return false;
                 }
             }
@@ -399,7 +425,8 @@ public class Kit : ICommand
             {
                 if (!kit.WhitelistedRoles.Contains(player.Role))
                 {
-                    response = $"You may not recieve this kit as {player.Role.Name}";
+                    //response = $"You may not recieve this kit as {player.Role.Name}";
+                    response = Translation.RecieveRole.Replace("%role%", player.Role.Name);
                     return false;
                 }
             }
@@ -408,7 +435,8 @@ public class Kit : ICommand
             {
                 if (kit.BlacklistedRoles.Contains(player.Role))
                 {
-                    response = $"You may not recieve this kit as {player.Role.Name}";
+                    //response = $"You may not recieve this kit as {player.Role.Name}";
+                    response = Translation.RecieveRole.Replace("%role%", player.Role.Name);
                     return false;
                 }
             }
@@ -436,7 +464,8 @@ public class Kit : ICommand
                 {
                     if (!player.CheckPermission("kits.give.givebypass"))
                     {
-                        response = $"You have already used this kit {uses} times. You cannot use it more than {kit.MaxUses} times.";
+                        //response = $"You have already used this kit {uses} times. You cannot use it more than {kit.MaxUses} times.";
+                        response = Translation.MaxUses.Replace("%times%",uses.ToString()).Replace("%maxuses%",kit.MaxUses.ToString());
                         return false;
                     }
                 }
@@ -455,7 +484,8 @@ public class Kit : ICommand
         }
         
         Plugin.Instance.KitEntryManager.GiveKitContents(player, kit);
-        response = $"Gave kit {kit.Name} to you!";
+        //response = $"Gave kit {kit.Name} to you!";
+        response = Translation.KitRedeemText.Replace("%kit%", kit.Name);
 
         if (!((CommandSender)sender).CheckPermission("kits.give.cooldownbypass"))
         {
