@@ -4,6 +4,7 @@ using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 using ExiledKitsPlugin.Classes;
+using PlayerRoles;
 
 namespace ExiledKitsPlugin.Commands;
 
@@ -89,6 +90,29 @@ public class Give : ICommand
 
         player = Player.Get(refPlayer);
         
+        if (!Round.IsStarted)
+        {
+            if (kit.WhitelistedRoles == null)
+            {
+                if (!player.CheckPermission("kits.give.givebypass"))
+                {
+                    response = "Kits cannot be redeemed before the round has started.";
+                    return false;
+                }
+            }
+            else
+            {
+                if (kit.WhitelistedRoles.Contains(RoleTypeId.Scientist))
+                {
+                    if (!player.CheckPermission("kits.give.givebypass"))
+                    {
+                        response = "Kits cannot be redeemed before the round has started.";
+                        return false;
+                    }
+                }
+            }
+        }
+        
         if (kit.CooldownInSeconds > -1f || kit.InitialCooldown > -1f)
         {
             if (Plugin.Instance.KitManager.IsKitEntryOnCooldown(kit,player))
@@ -102,13 +126,25 @@ public class Give : ICommand
             }
         }
         
-        if (kit.GlobalKitTimeout > -1f)
+        if (kit.GlobalKitTimeout > 0)
         {
-            if (Plugin.Instance.KitManager.GameRunningTime > kit.GlobalKitTimeout)
+            if (kit.GlobalKitTimeout < Round.ElapsedTime.Seconds)
             {
                 if (!player.CheckPermission("kits.give.timoutbypass"))
                 {
-                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting.";
+                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting. The game has been running for {Round.ElapsedTime.Seconds}s.";
+                    return false;
+                }
+            }
+        }
+        
+        if (kit.InitialGlobalCooldown > 0)
+        {
+            if (kit.InitialGlobalCooldown > Round.ElapsedTime.Seconds)
+            {
+                if (!player.CheckPermission("kits.give.cooldownbypass"))
+                {
+                    response = $"This kit cannot be redeemed for {kit.InitialGlobalCooldown}s after the game has started. The game has been running for {Round.ElapsedTime.Seconds}s.";
                     return false;
                 }
             }
@@ -263,6 +299,29 @@ public class Kit : ICommand
             return false;
         }
         
+        if (!Round.IsStarted)
+        {
+            if (kit.WhitelistedRoles == null)
+            {
+                if (!player.CheckPermission("kits.give.givebypass"))
+                {
+                    response = "Kits cannot be redeemed before the round has started.";
+                    return false;
+                }
+            }
+            else
+            {
+                if (kit.WhitelistedRoles.Contains(RoleTypeId.Scientist))
+                {
+                    if (!player.CheckPermission("kits.give.givebypass"))
+                    {
+                        response = "Kits cannot be redeemed before the round has started.";
+                        return false;
+                    }
+                }
+            }
+        }
+        
         if (!kit.Enabled && !((CommandSender)sender).CheckPermission("kits.give.givebypass"))
         {
             response = "This kit is not enabled and cannot be redeemed.";
@@ -282,13 +341,25 @@ public class Kit : ICommand
             }
         }
 
-        if (kit.GlobalKitTimeout > -1f)
+        if (kit.GlobalKitTimeout > 0)
         {
-            if (Plugin.Instance.KitManager.GameRunningTime > kit.GlobalKitTimeout)
+            if (kit.GlobalKitTimeout < Round.ElapsedTime.Seconds)
             {
                 if (!player.CheckPermission("kits.give.timoutbypass"))
                 {
-                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting.";
+                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting. The game has been running for {Round.ElapsedTime.Seconds}s.";
+                    return false;
+                }
+            }
+        }
+        
+        if (kit.InitialGlobalCooldown > 0)
+        {
+            if (kit.InitialGlobalCooldown > Round.ElapsedTime.Seconds)
+            {
+                if (!player.CheckPermission("kits.give.cooldownbypass"))
+                {
+                    response = $"This kit cannot be redeemed for {kit.InitialGlobalCooldown}s after the game has started. The game has been running for {Round.ElapsedTime.Seconds}s.";
                     return false;
                 }
             }

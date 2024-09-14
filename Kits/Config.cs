@@ -21,7 +21,7 @@ namespace ExiledKitsPlugin
         public List<KitEntry> Kits { get; set; } = new List<KitEntry>()
         {
             new KitEntry()
-                { Name = "itemdemo", UsePermission = false, Ammo = null, Effects = null, Enabled = true, OverrideInventory = false, WhitelistedRoles = null, Items = new List<ItemType>() { ItemType.Coin, ItemType.Adrenaline }, CooldownInSeconds = 1800f},
+                { Name = "itemdemo", UsePermission = false, Ammo = null, Effects = null, Enabled = true, OverrideInventory = false, WhitelistedRoles = null, Items = new List<ItemType>() { ItemType.Coin, ItemType.Adrenaline }, CooldownInSeconds = 180},
             new KitEntry()
                 { Name = "ammodemo", UsePermission = true, Ammo = new Dictionary<AmmoType, ushort>() { { AmmoType.Nato9, 30}, { AmmoType.Nato556, 5}}, Effects = null, Enabled = true, OverrideInventory = true, DropOverridenItems = false, WhitelistedRoles = null,Items = new List<ItemType>() { ItemType.GunCOM15, ItemType.Flashlight }, CooldownInSeconds = 60f},
             new KitEntry()
@@ -32,7 +32,10 @@ namespace ExiledKitsPlugin
             new KitEntry()
             {
                 Name = "roledemo", UsePermission = true, Ammo = null, Effects = null, Enabled = true, OverrideInventory = true, WhitelistedRoles = null, BlacklistedRoles = new List<RoleTypeId>() { RoleTypeId.ClassD}, Items = new List<ItemType>() { ItemType.Adrenaline, ItemType.Medkit, ItemType.Lantern },
-                InitialCooldown = 20f, CooldownInSeconds = 60f, MaxUses = 2, GlobalKitTimeout = 120f, SetRole = RoleTypeId.Tutorial, DropOverridenItems = true}
+                InitialCooldown = 20f, CooldownInSeconds = 60f, MaxUses = 2, GlobalKitTimeout = 120, SetRole = RoleTypeId.Tutorial, DropOverridenItems = true},
+            new KitEntry(){ Name = "Example", UsePermission = true, InitialCooldown = 0f, CooldownInSeconds = 30f, OverrideInventory = false, WhitelistedRoles = new List<RoleTypeId>() { RoleTypeId.Scientist, RoleTypeId.FacilityGuard}, 
+                Ammo = null, BlacklistedRoles = null, Effects = new List<Effect>(){new Effect(EffectType.Scp207, 0f, 1, false, true)}, Enabled = true, Items = new List<ItemType>() { ItemType.Adrenaline, ItemType.Medkit, ItemType.Lantern, ItemType.GunCOM15 }, 
+                MaxUses = 2, SetRole = RoleTypeId.NtfCaptain, DropOverridenItems = true, GlobalKitTimeout = 180, InitialGlobalCooldown = 30}
         };
         
         [Description("Should plugin show debug information?")]

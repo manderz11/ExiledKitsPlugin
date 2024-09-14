@@ -10,11 +10,12 @@ public class KitManager
     // just a slight optimisation if there aren't many entries with an initial cooldown
     public List<KitEntry> InitialCooldownKitEntries = new List<KitEntry>();
     public List<KitEntry> TimeoutKitEntries = new List<KitEntry>();
+    public List<KitEntry> InitialGlobalCooldownKitEntries = new List<KitEntry>();
     //public Dictionary<Dictionary<Player, KitEntry>, int> KitUses = new Dictionary<Dictionary<Player, KitEntry>, int>();
     public List<KitUseEntry> KitUseEntries = new List<KitUseEntry>();
     
-    public float GameRunningTime = 0f;
-    public bool GameRunning = false;
+    /*public float GameRunningTime = 0f;
+    public bool GameRunning = false;*/
 
     public KitManager()
     {
@@ -28,6 +29,11 @@ public class KitManager
             if (kitEntry.GlobalKitTimeout > 0f)
             {
                 TimeoutKitEntries.Add(kitEntry);
+            }
+
+            if (kitEntry.InitialGlobalCooldown > 0f)
+            {
+                InitialGlobalCooldownKitEntries.Add(kitEntry);
             }
         }
     }
@@ -100,14 +106,14 @@ public class KitManager
         return kitUseEntry;
     }
 
-    public IEnumerator<float> GameRunningTimer()
+    /*public IEnumerator<float> GameRunningTimer()
     {
         while (GameRunning)
         {
             GameRunningTime += 1f;
             yield return Timing.WaitForSeconds(1);
         }
-    }
+    }*/
 }
 
 public class CooldownEntry

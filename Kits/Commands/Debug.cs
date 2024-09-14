@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CommandSystem;
+using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 
 namespace ExiledKitsPlugin.Commands;
@@ -20,7 +21,7 @@ public class Debug : ICommand
         }
 
         string formatted = "Debug information:\n";
-        formatted += $"Round running time: {Plugin.Instance.KitManager.GameRunningTime}\n";
+        formatted += $"Round running time: {Round.ElapsedTime.Seconds}s\n";
         formatted += "Kit uses:\n";
         foreach (var kitUses in Plugin.Instance.KitManager.KitUseEntries)
         {

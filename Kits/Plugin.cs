@@ -9,12 +9,14 @@ namespace ExiledKitsPlugin
     1. initial kit cooldowns -- done
     2. giving without using kit parent command -- done
     3. probably some refactoring of a year old code -- in progress
-    4. global kit cooldown
+    4. global kit cooldown -- done
     5. kit timeout cooldown -- done
     6. max kit uses -- done
     7. blacklisted ktis though it would conflict with whitelisted in a way but is more covenient -- done
     8. role setting -- done
     9. change permissions to more appropriate permissions -- done
+    10. replace kitmanagers gamerunning with Round.ElapsedTime -- done
+    11. implement translations
      */
     public class Plugin : Plugin<Config>
     {
