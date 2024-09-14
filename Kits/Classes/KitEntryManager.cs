@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Enums;
 using Exiled.API.Features;
+using PlayerRoles;
 
 namespace ExiledKitsPlugin.Classes;
 
@@ -26,6 +28,10 @@ public class KitEntryManager
     
     public void GiveKitContents(Player player, KitEntry kit)
     {
+        if (kit.SetRole != RoleTypeId.None && kit.SetRole != null)
+        {
+            player.Role.Set(kit.SetRole,SpawnReason.ForceClass,RoleSpawnFlags.None);
+        }
         if (kit.Items != null)
         {
             player.AddItem(kit.Items);
@@ -73,6 +79,11 @@ public class KitEntryManager
             {
                 formatted += $"-({effect.Intensity}x) {effect.Type.ToString()} {effect.Duration}s\n";
             }
+        }
+
+        if (kit.SetRole != RoleTypeId.None && kit.SetRole != null)
+        {
+            formatted += $"<color=#DC143C># Sets role to: {kit.SetRole}</color>\n";
         }
         return formatted;
     }

@@ -424,6 +424,7 @@
         <Compile Include="Classes\KitManager.cs" />
         <Compile Include="Classes\KitEntry.cs" />
         <Compile Include="Classes\KitEntryManager.cs" />
+        <Compile Include="Commands\Debug.cs" />
         <Compile Include="Commands\Delete.cs" />
         <Compile Include="Commands\Disable.cs" />
         <Compile Include="Commands\Enable.cs" />

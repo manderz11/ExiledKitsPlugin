@@ -81,7 +81,7 @@ public class Give : ICommand
             return false;
         }
         
-        if (!kit.Enabled && !((CommandSender)sender).CheckPermission("kits.givebypass"))
+        if (!kit.Enabled && !((CommandSender)sender).CheckPermission("kits.give.givebypass"))
         {
             response = "This kit is not enabled and cannot be redeemed.";
             return false;
@@ -101,13 +101,37 @@ public class Give : ICommand
                 }
             }
         }
-
-        if (kit.WhitelistedRoles != null)
+        
+        if (kit.GlobalKitTimeout > -1f)
         {
-            if (!kit.WhitelistedRoles.Contains(player.Role))
+            if (Plugin.Instance.KitManager.GameRunningTime > kit.GlobalKitTimeout)
             {
-                response = $"This player may not recieve this kit as {player.Role.Name}";
-                return false;
+                if (!player.CheckPermission("kits.give.timoutbypass"))
+                {
+                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting.";
+                    return false;
+                }
+            }
+        }
+
+        if (!player.CheckPermission("kits.give.givebypass"))
+        {
+            if (kit.WhitelistedRoles != null)
+            {
+                if (!kit.WhitelistedRoles.Contains(player.Role))
+                {
+                    response = $"This player may not recieve this kit as {player.Role.Name}";
+                    return false;
+                }
+            }
+
+            if (kit.BlacklistedRoles != null)
+            {
+                if (kit.BlacklistedRoles.Contains(player.Role))
+                {
+                    response = $"This player may not recieve this kit as {player.Role.Name}";
+                    return false;
+                }
             }
         }
         
@@ -125,11 +149,13 @@ public class Give : ICommand
         
         if (kit.MaxUses > 0)
         {
-            if (Plugin.Instance.KitManager.KitUses.TryGetValue(new Dictionary<Player, KitEntry>(){{player,kit}},out int uses))
+            KitUseEntry useEntry = Plugin.Instance.KitManager.GetKitUseEntry(player, kit);
+            if (useEntry != null)
             {
-                if (uses > kit.MaxUses)
+                int uses = useEntry.Uses;
+                if (uses >= kit.MaxUses)
                 {
-                    if (!player.CheckPermission("kits.givebypass"))
+                    if (!player.CheckPermission("kits.give.givebypass"))
                     {
                         response = $"You have already used this kit {uses} times. You cannot use it more than {kit.MaxUses} times.";
                         return false;
@@ -137,12 +163,15 @@ public class Give : ICommand
                 }
                 else
                 {
-                    Plugin.Instance.KitManager.KitUses[new Dictionary<Player, KitEntry>(){{player,kit}}] += 1;
+                    if(Plugin.Instance.Config.Debug)Log.Debug($"kit entry uses for {player.Nickname} are {uses}");
+                    //Plugin.Instance.KitManager.KitUseEntries.Find(x => x.Player == player && x.KitEntry == kit).Uses++;
+                    useEntry.Uses += 1;
                 }
             }
             else
             {
-                Plugin.Instance.KitManager.KitUses.Add(new Dictionary<Player, KitEntry>(){{player,kit}},1);
+                if(Plugin.Instance.Config.Debug)Log.Debug($"Adding kit entry uses for {player.Nickname} with 1");
+                Plugin.Instance.KitManager.KitUseEntries.Add(new KitUseEntry(kit,player,1));
             }
         }
         
@@ -154,6 +183,7 @@ public class Give : ICommand
             if (kit.CooldownInSeconds > -1f || kit.InitialCooldown > -1f)
             {
                 Plugin.Instance.KitManager.StartKitCooldown(kit, player, kit.CooldownInSeconds);
+                if (Plugin.Instance.Config.Debug) Log.Debug($"Starting kit cooldown for {kit.Name} for {kit.CooldownInSeconds} seconds");
             }
         }
         
@@ -161,6 +191,7 @@ public class Give : ICommand
         return true;
     }
 }
+// seperating them sucks but it works i guess should make a combination or whatever its called lmao
 [CommandHandler(typeof(GameConsoleCommandHandler))]
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
@@ -232,7 +263,7 @@ public class Kit : ICommand
             return false;
         }
         
-        if (!kit.Enabled && !((CommandSender)sender).CheckPermission("kits.givebypass"))
+        if (!kit.Enabled && !((CommandSender)sender).CheckPermission("kits.give.givebypass"))
         {
             response = "This kit is not enabled and cannot be redeemed.";
             return false;
@@ -251,12 +282,36 @@ public class Kit : ICommand
             }
         }
 
-        if (kit.WhitelistedRoles != null)
+        if (kit.GlobalKitTimeout > -1f)
         {
-            if (!kit.WhitelistedRoles.Contains(player.Role))
+            if (Plugin.Instance.KitManager.GameRunningTime > kit.GlobalKitTimeout)
             {
-                response = $"You may not recieve this kit as {player.Role.Name}";
-                return false;
+                if (!player.CheckPermission("kits.give.timoutbypass"))
+                {
+                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting.";
+                    return false;
+                }
+            }
+        }
+
+        if (!player.CheckPermission("kits.give.givebypass"))
+        {
+            if (kit.WhitelistedRoles != null)
+            {
+                if (!kit.WhitelistedRoles.Contains(player.Role))
+                {
+                    response = $"You may not recieve this kit as {player.Role.Name}";
+                    return false;
+                }
+            }
+
+            if (kit.BlacklistedRoles != null)
+            {
+                if (kit.BlacklistedRoles.Contains(player.Role))
+                {
+                    response = $"You may not recieve this kit as {player.Role.Name}";
+                    return false;
+                }
             }
         }
         
@@ -274,11 +329,13 @@ public class Kit : ICommand
 
         if (kit.MaxUses > 0)
         {
-            if (Plugin.Instance.KitManager.KitUses.TryGetValue(new Dictionary<Player, KitEntry>(){{player,kit}},out int uses))
+            KitUseEntry useEntry = Plugin.Instance.KitManager.GetKitUseEntry(player, kit);
+            if (useEntry != null)
             {
-                if (uses > kit.MaxUses)
+                int uses = useEntry.Uses;
+                if (uses >= kit.MaxUses)
                 {
-                    if (!player.CheckPermission("kits.givebypass"))
+                    if (!player.CheckPermission("kits.give.givebypass"))
                     {
                         response = $"You have already used this kit {uses} times. You cannot use it more than {kit.MaxUses} times.";
                         return false;
@@ -286,12 +343,15 @@ public class Kit : ICommand
                 }
                 else
                 {
-                    Plugin.Instance.KitManager.KitUses[new Dictionary<Player, KitEntry>(){{player,kit}}] += 1;
+                    if(Plugin.Instance.Config.Debug)Log.Debug($"kit entry uses for {player.Nickname} are {uses}");
+                    //Plugin.Instance.KitManager.KitUseEntries.Find(x => x.Player == player && x.KitEntry == kit).Uses++;
+                    useEntry.Uses += 1;
                 }
             }
             else
             {
-                Plugin.Instance.KitManager.KitUses.Add(new Dictionary<Player, KitEntry>(){{player,kit}},1);
+                if(Plugin.Instance.Config.Debug)Log.Debug($"Adding kit entry uses for {player.Nickname} with 1");
+                Plugin.Instance.KitManager.KitUseEntries.Add(new KitUseEntry(kit,player,1));
             }
         }
         
@@ -303,6 +363,7 @@ public class Kit : ICommand
             if (kit.CooldownInSeconds > -1f || kit.InitialCooldown > -1f)
             {
                 Plugin.Instance.KitManager.StartKitCooldown(kit, player, kit.CooldownInSeconds);
+                if (Plugin.Instance.Config.Debug) Log.Debug($"Starting kit cooldown for {kit.Name} for {kit.CooldownInSeconds} seconds");
             }
         }
         

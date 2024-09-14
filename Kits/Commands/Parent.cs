@@ -21,12 +21,13 @@ public class Parent : ParentCommand
         RegisterCommand(new Enable());
         RegisterCommand(new Disable());
         RegisterCommand(new Kit());
+        RegisterCommand(new Debug());
     }
 
     protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
-        //response = "Use: kits (list | give | create | delete | edit | enable | disable)";
-        response = "Use: kits (list | give | delete | enable | disable)";
+        //response = "Use: kits (list | give | create | delete | edit | enable | disable | debug)";
+        response = "Use: kits (list | give | delete | enable | disable | debug)";
         return false;
     }
 }

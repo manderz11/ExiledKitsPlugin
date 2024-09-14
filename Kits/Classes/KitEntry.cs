@@ -25,6 +25,8 @@ namespace ExiledKitsPlugin.Classes
         public int MaxUses { get; set; }
         [Description("Allowed roles to redeem kit")]
         [CanBeNull]public List<RoleTypeId> WhitelistedRoles { get; set; }
+        [Description("Blacklisted roles to redeem kit, overrides whitelisted if the same role is set in whitelisted")]
+        [CanBeNull]public List<RoleTypeId> BlacklistedRoles { get; set; }
         [Description("Should kit delete existing inventory items")]
         public bool OverrideInventory { get; set; }
         [Description("Should overriden items be destroyed")]
@@ -32,5 +34,6 @@ namespace ExiledKitsPlugin.Classes
         [CanBeNull] public List<ItemType> Items { get; set; }
         [CanBeNull] public Dictionary<AmmoType, ushort> Ammo { get; set; }
         [CanBeNull] public List<Effect> Effects { get; set; }
+        [CanBeNull] public RoleTypeId SetRole { get; set; }
     }
 }

@@ -9,8 +9,12 @@ public class KitManager
     public List<CooldownEntry> CooldownEntries = new List<CooldownEntry>();
     // just a slight optimisation if there aren't many entries with an initial cooldown
     public List<KitEntry> InitialCooldownKitEntries = new List<KitEntry>();
-
-    public Dictionary<Dictionary<Player, KitEntry>, int> KitUses = new Dictionary<Dictionary<Player, KitEntry>, int>();
+    public List<KitEntry> TimeoutKitEntries = new List<KitEntry>();
+    //public Dictionary<Dictionary<Player, KitEntry>, int> KitUses = new Dictionary<Dictionary<Player, KitEntry>, int>();
+    public List<KitUseEntry> KitUseEntries = new List<KitUseEntry>();
+    
+    public float GameRunningTime = 0f;
+    public bool GameRunning = false;
 
     public KitManager()
     {
@@ -19,6 +23,11 @@ public class KitManager
             if (kitEntry.InitialCooldown > 0f)
             {
                 InitialCooldownKitEntries.Add(kitEntry);
+            }
+
+            if (kitEntry.GlobalKitTimeout > 0f)
+            {
+                TimeoutKitEntries.Add(kitEntry);
             }
         }
     }
@@ -84,6 +93,21 @@ public class KitManager
         CooldownEntry cooldownEntry = CooldownEntries.Find(x => x.Player == player && x.Kit == kitEntry);
         return cooldownEntry;
     }
+
+    public KitUseEntry GetKitUseEntry(Player player, KitEntry kitEntry)
+    {
+        KitUseEntry kitUseEntry = KitUseEntries.Find(x => x.Player == player && x.KitEntry == kitEntry);
+        return kitUseEntry;
+    }
+
+    public IEnumerator<float> GameRunningTimer()
+    {
+        while (GameRunning)
+        {
+            GameRunningTime += 1f;
+            yield return Timing.WaitForSeconds(1);
+        }
+    }
 }
 
 public class CooldownEntry
@@ -108,10 +132,30 @@ public class CooldownEntry
 
     public IEnumerator<float> ReduceTime()
     {
-        while (RemainingTime > 0)
+        while (RemainingTime > 0f)
         {
-            RemainingTime -= 1;
+            RemainingTime -= 1f;
             yield return Timing.WaitForSeconds(1);
         }
     }
+}
+
+public class KitUseEntry
+{
+    public KitUseEntry(KitEntry kitEntry, Player player, int uses)
+    {
+        Player = player;
+        KitEntry = kitEntry;
+        Uses = uses;
+    }
+
+    public KitUseEntry(KitEntry kitEntry, Player player)
+    {
+        Player = player;
+        KitEntry = kitEntry;
+    }
+
+    public KitEntry KitEntry;
+    public Player Player;
+    public int Uses;
 }
