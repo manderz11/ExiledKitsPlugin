@@ -75,8 +75,13 @@ Known issues as of the latest release, including pre-releases
 
 ## Support
 
-Support for the plugin can only be found on the [issues](https://github.com/manderz11/ExiledKitsPlugin/issues) tab or by messaging me on discord (manderz11)
+Support for the plugin can only be found on the [issues](https://github.com/manderz11/ExiledKitsPlugin/issues) tab or on my [community discord server](https://discord.gg/ZWsQkf689J) in the plugins and mods category
 
 ## Suggestions
 
-Submission for suggestions can also be found on the [discussions](https://github.com/manderz11/ExiledKitsPlugin/discussions) tab by creating a new discussion with ideas tag or also by messaging me on discord (manderz11)
+Submission for suggestions can also be found on the [discussions](https://github.com/manderz11/ExiledKitsPlugin/discussions) tab by creating a new discussion with ideas tag or also on my [community discord server](https://discord.gg/ZWsQkf689J) in the plugins and mods category
+
+## Special thanks
+
+Special thanks to:
+- Rasnirt (rasnirt) on discord for suggesting features for the plugin on discord.
