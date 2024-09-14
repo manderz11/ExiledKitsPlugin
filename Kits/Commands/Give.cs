@@ -128,11 +128,11 @@ public class Give : ICommand
         
         if (kit.GlobalKitTimeout > 0)
         {
-            if (kit.GlobalKitTimeout < Round.ElapsedTime.Seconds)
+            if (kit.GlobalKitTimeout < Round.ElapsedTime.TotalSeconds)
             {
-                if (!player.CheckPermission("kits.give.timoutbypass"))
+                if (!player.CheckPermission("kits.give.timeoutbypass"))
                 {
-                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting. The game has been running for {Round.ElapsedTime.Seconds}s.";
+                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
                     return false;
                 }
             }
@@ -140,11 +140,25 @@ public class Give : ICommand
         
         if (kit.InitialGlobalCooldown > 0)
         {
-            if (kit.InitialGlobalCooldown > Round.ElapsedTime.Seconds)
+            if (kit.InitialGlobalCooldown > Round.ElapsedTime.TotalSeconds)
             {
                 if (!player.CheckPermission("kits.give.cooldownbypass"))
                 {
-                    response = $"This kit cannot be redeemed for {kit.InitialGlobalCooldown}s after the game has started. The game has been running for {Round.ElapsedTime.Seconds}s.";
+                    response = $"This kit cannot be redeemed for {kit.InitialGlobalCooldown}s after the game has started. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
+                    return false;
+                }
+            }
+        }
+        
+        if (kit.SpawnKitTimeout > 0)
+        {
+            if (Round.ElapsedTime.TotalSeconds >
+                kit.SpawnKitTimeout + Plugin.Instance.KitManager.PlayerSpawnTime[player])
+            {
+                if (!player.CheckPermission("kits.give.timeoutbypass"))
+                {
+                    if(Plugin.Instance.Config.Debug)Log.Debug($"Player spawn time: {Plugin.Instance.KitManager.PlayerSpawnTime[player]}s Timeout should be after {Plugin.Instance.KitManager.PlayerSpawnTime[player] + kit.SpawnKitTimeout}s. Current time: {Round.ElapsedTime.TotalSeconds}s");
+                    response = $"This kit cannot be redeemed after {kit.SpawnKitTimeout}s after spawning! You have been alive for: {Round.ElapsedTime.TotalSeconds - Plugin.Instance.KitManager.PlayerSpawnTime[player]}s";
                     return false;
                 }
             }
@@ -343,11 +357,11 @@ public class Kit : ICommand
 
         if (kit.GlobalKitTimeout > 0)
         {
-            if (kit.GlobalKitTimeout < Round.ElapsedTime.Seconds)
+            if (kit.GlobalKitTimeout < Round.ElapsedTime.TotalSeconds)
             {
-                if (!player.CheckPermission("kits.give.timoutbypass"))
+                if (!player.CheckPermission("kits.give.timeoutbypass"))
                 {
-                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting. The game has been running for {Round.ElapsedTime.Seconds}s.";
+                    response = $"You cannot use this kit after {kit.GlobalKitTimeout}s of the game starting. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
                     return false;
                 }
             }
@@ -355,11 +369,25 @@ public class Kit : ICommand
         
         if (kit.InitialGlobalCooldown > 0)
         {
-            if (kit.InitialGlobalCooldown > Round.ElapsedTime.Seconds)
+            if (kit.InitialGlobalCooldown > Round.ElapsedTime.TotalSeconds)
             {
                 if (!player.CheckPermission("kits.give.cooldownbypass"))
                 {
-                    response = $"This kit cannot be redeemed for {kit.InitialGlobalCooldown}s after the game has started. The game has been running for {Round.ElapsedTime.Seconds}s.";
+                    response = $"This kit cannot be redeemed for {kit.InitialGlobalCooldown}s after the game has started. The game has been running for {Round.ElapsedTime.TotalSeconds}s.";
+                    return false;
+                }
+            }
+        }
+        
+        if (kit.SpawnKitTimeout > 0)
+        {
+            if (Round.ElapsedTime.TotalSeconds >
+                kit.SpawnKitTimeout + Plugin.Instance.KitManager.PlayerSpawnTime[player])
+            {
+                if (!player.CheckPermission("kits.give.timeoutbypass"))
+                {
+                    if(Plugin.Instance.Config.Debug)Log.Debug($"Player spawn time: {Plugin.Instance.KitManager.PlayerSpawnTime[player]}s Timeout should be after {Plugin.Instance.KitManager.PlayerSpawnTime[player] + kit.SpawnKitTimeout}s. Current time: {Round.ElapsedTime.TotalSeconds}s");
+                    response = $"This kit cannot be redeemed after {kit.SpawnKitTimeout}s after spawning! You have been alive for: {Round.ElapsedTime.TotalSeconds - Plugin.Instance.KitManager.PlayerSpawnTime[player]}s";
                     return false;
                 }
             }

@@ -17,7 +17,6 @@ public class Handlers
         {
             Plugin.Instance.KitManager = new KitManager();
         }
-
         /*Plugin.Instance.KitManager.GameRunning = false;
         Plugin.Instance.KitManager.GameRunningTime = 0f;*/
     }
@@ -27,6 +26,15 @@ public class Handlers
         Player p = spawnedEventArgs.Player;
         // ignore cooldown bypassed players
         if (p.CheckPermission("kits.give.cooldownbypass")) return;
+        if (Plugin.Instance.KitManager.PlayerSpawnTime.ContainsKey(p))
+        {
+            Plugin.Instance.KitManager.PlayerSpawnTime.Remove(p);
+            Plugin.Instance.KitManager.PlayerSpawnTime.Add(p,Round.ElapsedTime.TotalSeconds);
+        }
+        else
+        {
+            Plugin.Instance.KitManager.PlayerSpawnTime.Add(p,Round.ElapsedTime.TotalSeconds);
+        }
         if(spawnedEventArgs.Reason == SpawnReason.ForceClass){return;}
         foreach (var kitEntry in Plugin.Instance.KitManager.InitialCooldownKitEntries)
         {

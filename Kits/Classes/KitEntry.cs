@@ -19,6 +19,8 @@ namespace ExiledKitsPlugin.Classes
         public int InitialGlobalCooldown { get; set; }
         [Description("Time after game start to timeout kit (disable redeeming), set to 0 to disable")]
         public int GlobalKitTimeout { get; set; }
+        [Description("Time after player spawn to timeout kit (disable redeeming), set to 0 to disable")]
+        public int SpawnKitTimeout { get; set; }
         [Description("Kit re-use cooldown in seconds, set to 0 to disable")]
         public float CooldownInSeconds { get; set; }
         [Description("Maximum number of uses per game, set to 0 to disable")]

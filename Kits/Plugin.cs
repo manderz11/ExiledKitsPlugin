@@ -16,7 +16,8 @@ namespace ExiledKitsPlugin
     8. role setting -- done
     9. change permissions to more appropriate permissions -- done
     10. replace kitmanagers gamerunning with Round.ElapsedTime -- done
-    11. implement translations
+    11. add timeout after spawn -- done
+    12. implement translations
      */
     public class Plugin : Plugin<Config>
     {

@@ -11,11 +11,9 @@ public class KitManager
     public List<KitEntry> InitialCooldownKitEntries = new List<KitEntry>();
     public List<KitEntry> TimeoutKitEntries = new List<KitEntry>();
     public List<KitEntry> InitialGlobalCooldownKitEntries = new List<KitEntry>();
-    //public Dictionary<Dictionary<Player, KitEntry>, int> KitUses = new Dictionary<Dictionary<Player, KitEntry>, int>();
+    public Dictionary<Player, double> PlayerSpawnTime = new Dictionary<Player, double>();
+
     public List<KitUseEntry> KitUseEntries = new List<KitUseEntry>();
-    
-    /*public float GameRunningTime = 0f;
-    public bool GameRunning = false;*/
 
     public KitManager()
     {
@@ -105,15 +103,6 @@ public class KitManager
         KitUseEntry kitUseEntry = KitUseEntries.Find(x => x.Player == player && x.KitEntry == kitEntry);
         return kitUseEntry;
     }
-
-    /*public IEnumerator<float> GameRunningTimer()
-    {
-        while (GameRunning)
-        {
-            GameRunningTime += 1f;
-            yield return Timing.WaitForSeconds(1);
-        }
-    }*/
 }
 
 public class CooldownEntry

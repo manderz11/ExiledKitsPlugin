@@ -21,7 +21,7 @@ public class Debug : ICommand
         }
 
         string formatted = "Debug information:\n";
-        formatted += $"Round running time: {Round.ElapsedTime.Seconds}s\n";
+        formatted += $"Round running time: {Round.ElapsedTime.TotalSeconds}s\n";
         formatted += "Kit uses:\n";
         foreach (var kitUses in Plugin.Instance.KitManager.KitUseEntries)
         {
@@ -32,6 +32,12 @@ public class Debug : ICommand
         foreach (var cooldownEntry in Plugin.Instance.KitManager.CooldownEntries)
         {
             formatted += $"Player: {cooldownEntry.Player.Nickname}, {cooldownEntry.Kit.Name} kit, {cooldownEntry.RemainingTime} time\n\n";
+        }
+        
+        formatted += "Player spawn times:\n";
+        foreach (var spawnTime in Plugin.Instance.KitManager.PlayerSpawnTime)
+        {
+            formatted += $"Player: {spawnTime.Key.Nickname}, spawn time: {spawnTime.Value} seconds\n\n";
         }
         response = formatted;
         return true;

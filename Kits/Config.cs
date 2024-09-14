@@ -15,7 +15,7 @@ namespace ExiledKitsPlugin
         public bool IsEnabled { get; set; } = true;
 
         [Description("Should cooldowns be reset after the round has ended")]
-        public bool ResetCooldownsOnRoundEnd { get; set; } = false;
+        public bool ResetCooldownsOnRoundEnd { get; set; } = true;
         
         [Description("Kit entries")]
         public List<KitEntry> Kits { get; set; } = new List<KitEntry>()
@@ -32,7 +32,7 @@ namespace ExiledKitsPlugin
             new KitEntry()
             {
                 Name = "roledemo", UsePermission = true, Ammo = null, Effects = null, Enabled = true, OverrideInventory = true, WhitelistedRoles = null, BlacklistedRoles = new List<RoleTypeId>() { RoleTypeId.ClassD}, Items = new List<ItemType>() { ItemType.Adrenaline, ItemType.Medkit, ItemType.Lantern },
-                InitialCooldown = 20f, CooldownInSeconds = 60f, MaxUses = 2, GlobalKitTimeout = 120, SetRole = RoleTypeId.Tutorial, DropOverridenItems = true},
+                InitialCooldown = 20f, CooldownInSeconds = 60f, MaxUses = 2, GlobalKitTimeout = 120, SetRole = RoleTypeId.Tutorial, DropOverridenItems = true, SpawnKitTimeout = 60},
             new KitEntry(){ Name = "Example", UsePermission = true, InitialCooldown = 0f, CooldownInSeconds = 30f, OverrideInventory = false, WhitelistedRoles = new List<RoleTypeId>() { RoleTypeId.Scientist, RoleTypeId.FacilityGuard}, 
                 Ammo = null, BlacklistedRoles = null, Effects = new List<Effect>(){new Effect(EffectType.Scp207, 0f, 1, false, true)}, Enabled = true, Items = new List<ItemType>() { ItemType.Adrenaline, ItemType.Medkit, ItemType.Lantern, ItemType.GunCOM15 }, 
                 MaxUses = 2, SetRole = RoleTypeId.NtfCaptain, DropOverridenItems = true, GlobalKitTimeout = 180, InitialGlobalCooldown = 30}
