@@ -76,3 +76,7 @@ Known issues as of the latest release, including pre-releases
 ## Support
 
 Support for the plugin can only be found on the [issues](https://github.com/manderz11/ExiledKitsPlugin/issues) tab or by messaging me on discord (manderz11)
+
+## Suggestions
+
+Submission for suggestions can also be found on the [discussions](https://github.com/manderz11/ExiledKitsPlugin/discussions) tab by creating a new discussion with ideas tag or also by messaging me on discord (manderz11)
