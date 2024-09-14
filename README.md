@@ -77,7 +77,7 @@ kits:
 - kits.enable, kits.disable,
 - kits.delete,
 - kits.debug,
-- kits.give.givebypass (if disabled), kits.give.cooldownbypass, kits.give.timoutbypass
+- kits.give.givebypass (if disabled), kits.give.cooldownbypass, kits.give.timeoutbypass
 
 ## TO-DO
 
