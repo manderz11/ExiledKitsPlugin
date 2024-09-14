@@ -1,48 +1,57 @@
 # Kits
 
-A Exiled kits plugin for SCP:SL. This plugin supports creation of kits only through the config file. Kits support giving items, ammo and status effects with configurable intensities and durations.
+A Exiled kits plugin for SCP:SL. This plugin supports creation of kits only through the config file. Kits support giving items, setting roles, giving ammo and status effects with configurable intensities and durations.
 
 ## Installation
 
--Download a release in the [release](https://github.com/manderz11/ExiledKitsPlugin/releases) tab.
+- Download a release in the [releases](https://github.com/manderz11/ExiledKitsPlugin/releases) tab.
 
--Place the plugin .dll file inside EXILED/Plugins
+- Place the plugin .dll file inside EXILED/Plugins
 
--Start the server
+- Start the server
 
--Profit
+- Profit
 
 ## Configuring
 
 Inside EXILED/Configs edit your servers (port)-config.yml
 
-Under kits edit the configurations to your desires
+Under kits edit the configurations to your desires.
 
-Example kit:
+Examples are provided as of the latest aviable version, including pre-releases.
+
+Example kit (generated from initial plugin launch):
 ```
 kits:
   kits:
-  - name: 'example'
+  - name: 'Example'
     enabled: true
-    use_permission: false
-    cooldown_in_seconds: 60
+    use_permission: true
+    initial_cooldown: 15
+    initial_global_cooldown: 0
+    global_kit_timeout: 180
+    cooldown_in_seconds: 30
+    max_uses: 2
     whitelisted_roles:
+    - Scientist
+    - FacilityGuard
+    blacklisted_roles: 
     override_inventory: false
-    drop_overriden_items: false
+    drop_overriden_items: true
     items:
+    - Adrenaline
     - Medkit
-    - Coin
-    - Flashlight
-    ammo:
-      Nato9: 60
-      Nato556: 15
+    - Lantern
+    - GunCOM15
+    ammo: 
     effects:
     -
-      type: MovementBoost
-      duration: 300
-      intensity: 100
+      type: Scp207
+      duration: 0
+      intensity: 1
       add_duration_if_active: false
       is_enabled: true
+    set_role: NtfCaptain
 ```
 
 ## Permissions
@@ -50,13 +59,20 @@ kits:
 - kits.give, kits.give.(kit name if usepermission is true),
 - kits.enable, kits.disable,
 - kits.delete,
-- kits.givebypass (if disabled), kits.give.cooldownbypass 
+- kits.debug,
+- kits.give.givebypass (if disabled), kits.give.cooldownbypass, kits.give.timoutbypass
 
 ## TO-DO
 
 - Saving kit configuration changes to file
 - In-game kit editing
 
+## Known issues
+
+Known issues as of the latest release, including pre-releases
+
+- Known permissions issue after adding the plugin with a new permission entry, usually after a update, a server restart is required to apply permission entries to be valid for permissions. This will be possibly fixed in the next full release as the plugin does not register permissions but instead checks with has permission method.
+
 ## Support
 
-Support for the plugin can only be found on the [issues](https://github.com/manderz11/ExiledKitsPlugin/issues) tab or by messaging me on discord (@manderz11)
+Support for the plugin can only be found on the [issues](https://github.com/manderz11/ExiledKitsPlugin/issues) tab or by messaging me on discord (manderz11)
