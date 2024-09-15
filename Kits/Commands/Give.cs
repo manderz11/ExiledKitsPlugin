@@ -94,6 +94,15 @@ public class Give : ICommand
 
         player = Player.Get(refPlayer);
         
+        if (Player.Get(sender) != player)
+        {
+            if (!sender.CheckPermission("kits.give.otherplayers"))
+            {
+                response = Translation.CannotGiveKits;
+                return false;
+            }
+        }
+        
         if (!Round.IsStarted)
         {
             if (kit.WhitelistedRoles == null)

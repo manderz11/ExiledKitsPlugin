@@ -11,12 +11,9 @@ namespace ExiledKitsPlugin.Handlers;
 
 public class Handlers
 {
-    public void OnRoundEnded(RoundEndedEventArgs roundEndedEventArgs)
+    public void OnRoundRestart()
     {
-        if (Plugin.Instance.Config.ResetCooldownsOnRoundEnd)
-        {
-            Plugin.Instance.KitManager = new KitManager();
-        }
+        Plugin.Instance.KitManager = new KitManager();
     }
 
     public void SpawnedEvent(SpawnedEventArgs spawnedEventArgs)
@@ -24,6 +21,7 @@ public class Handlers
         Player p = spawnedEventArgs.Player;
         // ignore cooldown bypassed players
         if (p.CheckPermission("kits.give.cooldownbypass")) return;
+        if(spawnedEventArgs.Reason == SpawnReason.Died)return;
         if (Plugin.Instance.KitManager.PlayerSpawnTime.ContainsKey(p))
         {
             Plugin.Instance.KitManager.PlayerSpawnTime.Remove(p);
@@ -33,7 +31,6 @@ public class Handlers
         {
             Plugin.Instance.KitManager.PlayerSpawnTime.Add(p,Round.ElapsedTime.TotalSeconds);
         }
-        if(spawnedEventArgs.Reason == SpawnReason.ForceClass){return;}
         foreach (var kitEntry in Plugin.Instance.KitManager.InitialCooldownKitEntries)
         {
             Plugin.Instance.KitManager.StartKitCooldown(kitEntry,p,kitEntry.InitialCooldown);
@@ -45,5 +42,11 @@ public class Handlers
     {
         // clear round kit uses
         Plugin.Instance.KitManager.KitUseEntries = new List<KitUseEntry>();
+    }
+
+    public void OnPlayerLeave(LeftEventArgs leftEventArgs)
+    {
+        if(Plugin.Instance.Config.Debug)Log.Debug($"Player {leftEventArgs.Player.Nickname} left! Clearing all data.");
+        Plugin.Instance.KitManager.RemovePlayerEntryData(leftEventArgs.Player);
     }
 }

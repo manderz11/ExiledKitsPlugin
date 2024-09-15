@@ -48,7 +48,27 @@ public class KitEntryManager
     public string FormattedKitContentList(KitEntry kit)
     {
         string formatted = $"<color=#32CD32># {kit.Name} (Enabled: {kit.Enabled}) contents:</color>\n";
-        formatted += $"<color=#FFFFFF># Settings: Enabled: {kit.Enabled} Override inventory: {kit.OverrideInventory} Drop overriden items: {kit.DropOverridenItems}</color>\n";
+        formatted += $"<color=#FFFFFF># Settings: Enabled: {kit.Enabled} Override inventory: {kit.OverrideInventory} Drop overriden items: {kit.DropOverridenItems}</color>\n" +
+                     $"<color=#FFFFFF># Use permission: {kit.UsePermission} Cooldown: {kit.CooldownInSeconds} Initial cooldown: {kit.InitialCooldown} Initial global cooldown: {kit.InitialGlobalCooldown}</color>\n" +
+                     $"<color=#FFFFFF># Kit spawn timeout: {kit.SpawnKitTimeout} Kit global timeout: {kit.GlobalKitTimeout}</color>\n";
+        if (kit.WhitelistedRoles != null)
+        {
+            formatted += "<color=#808080># Whitelisted roles:</color>\n";
+            foreach (var role in kit.WhitelistedRoles)
+            {
+                formatted += $"-{role.ToString()}\n";
+            }
+        }
+
+        if (kit.BlacklistedRoles != null)
+        {
+            formatted += "<color=#808080># Blacklisted roles:</color>\n";
+            foreach (var role in kit.BlacklistedRoles)
+            {
+                formatted += $"-{role.ToString()}\n";
+            }
+        }
+        
         if (kit.Items != null)
         {
             formatted += "<color=#DC143C># Items:</color>\n";

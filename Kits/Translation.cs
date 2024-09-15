@@ -46,5 +46,8 @@ public class Translation : ITranslation
     
     [Description("Text shown for the parent help command")]
     public string ParentCommand { get; set; } = "Use: kits (list | give | delete | enable | disable | debug)";
-    
+
+    [Description("Text shown when the player cannot give kits to other players")]
+    public string CannotGiveKits { get; set; } = "You do not have permission (kits.give.otherplayers) to give kits to other players.";
+
 }

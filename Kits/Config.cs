@@ -13,9 +13,6 @@ namespace ExiledKitsPlugin
     {
         [Description("Should plugin be enabled?")]
         public bool IsEnabled { get; set; } = true;
-
-        [Description("Should cooldowns be reset after the round has ended")]
-        public bool ResetCooldownsOnRoundEnd { get; set; } = true;
         
         [Description("Kit entries")]
         public List<KitEntry> Kits { get; set; } = new List<KitEntry>()

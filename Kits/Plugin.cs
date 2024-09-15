@@ -38,14 +38,18 @@ namespace ExiledKitsPlugin
         void RegisterEvents()
         {
             _handlers = new Handlers.Handlers();
-            Exiled.Events.Handlers.Server.RoundEnded += _handlers.OnRoundEnded;
+            //Exiled.Events.Handlers.Server.RoundEnded += _handlers.OnRoundEnded;
+            Exiled.Events.Handlers.Server.RestartingRound += _handlers.OnRoundRestart;
+            Exiled.Events.Handlers.Player.Left += _handlers.OnPlayerLeave;
             Exiled.Events.Handlers.Player.Spawned += _handlers.SpawnedEvent;
             Exiled.Events.Handlers.Server.RoundStarted += _handlers.RoundStarted;
         }
 
         void UnregisterEvents()
         {
-            Exiled.Events.Handlers.Server.RoundEnded -= _handlers.OnRoundEnded;
+            //Exiled.Events.Handlers.Server.RoundEnded -= _handlers.OnRoundEnded;
+            Exiled.Events.Handlers.Server.RestartingRound -= _handlers.OnRoundRestart;
+            Exiled.Events.Handlers.Player.Left -= _handlers.OnPlayerLeave;
             Exiled.Events.Handlers.Player.Spawned -= _handlers.SpawnedEvent;
             Exiled.Events.Handlers.Server.RoundStarted -= _handlers.RoundStarted;
             _handlers = null;
