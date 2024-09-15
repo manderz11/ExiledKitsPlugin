@@ -9,7 +9,7 @@ namespace ExiledKitsPlugin
     {
         public override string Name => "Kits";
         public override string Author => "manderz11";
-        public override Version Version => new Version(1, 1, 0);
+        public override Version Version => new Version(1, 1, 1);
         public static Plugin Instance { get; set; }
         public KitEntryManager KitEntryManager;
         public KitManager KitManager;
