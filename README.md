@@ -73,7 +73,7 @@ kits:
 
 ## Permissions
 
-- kits.give, kits.give.(kit name if usepermission is true),
+- kits.give, kits.give.(kit name if usepermission is true), kits.give.otherplayers,
 - kits.enable, kits.disable,
 - kits.delete,
 - kits.debug,
