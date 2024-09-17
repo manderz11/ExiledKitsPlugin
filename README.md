@@ -22,8 +22,6 @@ Examples are provided as of the latest aviable version, including pre-releases.
 
 Example kit (generated from initial plugin launch):
 ```
-kits:
-  kits:
   - name: 'Example'
     enabled: true
     # Should the kit be permissions based
@@ -47,9 +45,9 @@ kits:
     # Blacklisted roles to redeem kit, overrides whitelisted if the same role is set in whitelisted
     blacklisted_roles: 
     # Should kit delete existing inventory items
-    override_inventory: false
-    # Should overriden items be destroyed
-    drop_overriden_items: true
+    clear_inventory: false
+    # Should excess items be destroyed
+    drop_excess: false
     items:
     - Adrenaline
     - Medkit
