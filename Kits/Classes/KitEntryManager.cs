@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using PlayerRoles;
 
 namespace ExiledKitsPlugin.Classes;
@@ -29,7 +30,24 @@ public class KitEntryManager
         }
         if (kit.Items != null)
         {
-            player.AddItem(kit.Items);
+            List<ItemType> items = kit.Items;
+            if (player.Items.Count > kit.Items.Count)
+            {
+                foreach (var item in items)
+                {
+                    if (player.Items.Count >= 8)
+                    {
+                        if (kit.DropExcess)
+                        {
+                             Item.Create(item).CreatePickup(player.Position, player.Rotation, true).Spawn();
+                        }
+                    }
+                    else
+                    {
+                        player.AddItem(item);
+                    }
+                }
+            }
         }
         if (kit.Ammo != null)
         {
@@ -40,7 +58,6 @@ public class KitEntryManager
         }
         if (kit.Effects != null)
         {
-            //player.EnableEffects(kit.Effects); obsolete as of exiled 8.3.x
             player.SyncEffects(kit.Effects);
         }
     }
@@ -48,7 +65,7 @@ public class KitEntryManager
     public string FormattedKitContentList(KitEntry kit)
     {
         string formatted = $"<color=#32CD32># {kit.Name} (Enabled: {kit.Enabled}) contents:</color>\n";
-        formatted += $"<color=#FFFFFF># Settings: Enabled: {kit.Enabled} Override inventory: {kit.OverrideInventory} Drop overriden items: {kit.DropOverridenItems}</color>\n" +
+        formatted += $"<color=#FFFFFF># Settings: Enabled: {kit.Enabled} Clear inventory: {kit.ClearInventory} Drop excess items: {kit.DropExcess}</color>\n" +
                      $"<color=#FFFFFF># Use permission: {kit.UsePermission} Cooldown: {kit.CooldownInSeconds} Initial cooldown: {kit.InitialCooldown} Initial global cooldown: {kit.InitialGlobalCooldown}</color>\n" +
                      $"<color=#FFFFFF># Kit spawn timeout: {kit.SpawnKitTimeout} Kit global timeout: {kit.GlobalKitTimeout}</color>\n";
         if (kit.WhitelistedRoles != null)

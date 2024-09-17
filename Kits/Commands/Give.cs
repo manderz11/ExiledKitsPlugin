@@ -206,16 +206,9 @@ public class Give : ICommand
             }
         }
         
-        if (kit.OverrideInventory == true)
+        if (kit.ClearInventory == true)
         {
-            if (kit.DropOverridenItems)
-            {
-                player.DropItems();
-            }
-            else
-            {
-                player.ClearInventory(true);
-            }
+            player.ClearInventory(true);
         }
         
         if (kit.MaxUses > 0)
@@ -450,16 +443,9 @@ public class Kit : ICommand
             }
         }
         
-        if (kit.OverrideInventory == true)
+        if (kit.ClearInventory == true)
         {
-            if (kit.DropOverridenItems)
-            {
-                player.DropItems();
-            }
-            else
-            {
-                player.ClearInventory(true);
-            }
+            player.ClearInventory(true);
         }
 
         if (kit.MaxUses > 0)
