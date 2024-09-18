@@ -31,21 +31,18 @@ public class KitEntryManager
         if (kit.Items != null)
         {
             List<ItemType> items = kit.Items;
-            if (player.Items.Count > kit.Items.Count)
+            foreach (var item in items)
             {
-                foreach (var item in items)
+                if (player.Items.Count >= 8)
                 {
-                    if (player.Items.Count >= 8)
+                    if (kit.DropExcess)
                     {
-                        if (kit.DropExcess)
-                        {
-                             Item.Create(item).CreatePickup(player.Position, player.Rotation, true).Spawn();
-                        }
+                        Item.Create(item).CreatePickup(player.Position, player.Rotation, true).Spawn();
                     }
-                    else
-                    {
-                        player.AddItem(item);
-                    }
+                }
+                else
+                {
+                    player.AddItem(item);
                 }
             }
         }

@@ -29,9 +29,9 @@ namespace ExiledKitsPlugin.Classes
         [CanBeNull]public List<RoleTypeId> WhitelistedRoles { get; set; }
         [Description("Blacklisted roles to redeem kit, overrides whitelisted if the same role is set in whitelisted")]
         [CanBeNull]public List<RoleTypeId> BlacklistedRoles { get; set; }
-        [Description("Should kit delete existing inventory items")]
+        [Description("Should kit delete all existing inventory items")]
         public bool ClearInventory { get; set; }
-        [Description("Should excess items be destroyed")]
+        [Description("Should excess items be dropped")]
         public bool DropExcess { get; set; }
         [CanBeNull] public List<ItemType> Items { get; set; }
         [CanBeNull] public Dictionary<AmmoType, ushort> Ammo { get; set; }
