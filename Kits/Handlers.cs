@@ -21,7 +21,11 @@ public class Handlers
         Player p = spawnedEventArgs.Player;
         // ignore cooldown bypassed players
         if (p.CheckPermission("kits.give.cooldownbypass")) return;
-        if(spawnedEventArgs.Reason == SpawnReason.Died)return;
+        if (spawnedEventArgs.Reason == SpawnReason.Died)
+        {
+            if (Plugin.Instance.Config.Debug) Log.Debug($"Player {spawnedEventArgs.Player.Nickname} died! Skipping spawnedevent. Reason: {spawnedEventArgs.Reason}. Possibly player left.");
+            return;
+        }
         if (Plugin.Instance.KitManager.PlayerSpawnTime.ContainsKey(p))
         {
             Plugin.Instance.KitManager.PlayerSpawnTime.Remove(p);

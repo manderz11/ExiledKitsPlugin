@@ -9,7 +9,7 @@ namespace ExiledKitsPlugin
     {
         public override string Name => "Kits";
         public override string Author => "manderz11";
-        public override Version Version => new Version(1, 1, 2);
+        public override Version Version => new Version(1, 1, 4);
         public static Plugin Instance { get; set; }
         public KitEntryManager KitEntryManager;
         public KitManager KitManager;
@@ -22,6 +22,12 @@ namespace ExiledKitsPlugin
             KitEntryManager.KitEntries = Config.Kits;
             KitManager = new KitManager();
             RegisterEvents();
+            // fix spawn time if plugin is reloaded
+            foreach (var player in Player.List)
+            {
+                if (!player.IsAlive) continue;
+                KitManager.PlayerSpawnTime.Add(player,Round.ElapsedTime.TotalSeconds);
+            }
             base.OnEnabled();
         }
 
@@ -33,7 +39,6 @@ namespace ExiledKitsPlugin
             UnregisterEvents();
             base.OnDisabled();
         }
-        
 
         void RegisterEvents()
         {
