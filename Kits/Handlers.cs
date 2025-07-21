@@ -2,12 +2,10 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
-using Exiled.Events.EventArgs.Server;
 using Exiled.Permissions.Extensions;
 using ExiledKitsPlugin.Classes;
-using MEC;
 
-namespace ExiledKitsPlugin.Handlers;
+namespace ExiledKitsPlugin;
 
 public class Handlers
 {
