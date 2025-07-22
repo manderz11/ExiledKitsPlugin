@@ -9,7 +9,6 @@ public class KitManager
 {
     public List<CooldownEntry> CooldownEntries = new List<CooldownEntry>();
     public List<KitUseEntry> KitUseEntries = new List<KitUseEntry>();
-    // just a slight optimisation if there aren't many entries with an initial cooldown
     public List<KitEntry> InitialCooldownKitEntries = new List<KitEntry>();
     public Dictionary<Player, double> PlayerSpawnTime = new Dictionary<Player, double>();
 
@@ -177,18 +176,6 @@ public class KitManager
 
     public void RemovePlayerEntryData(Player player)
     {
-        /*
-        foreach (var playerCooldownEntry in CooldownEntries.FindAll(x => x.Player == player))
-        {
-            CooldownEntries.Remove(playerCooldownEntry);
-        }
-
-        foreach (var playerKitUseEntry in KitUseEntries.FindAll(x => x.Player == player))
-        {
-            KitUseEntries.Remove(playerKitUseEntry);
-        }
-        */
-
         if (PlayerSpawnTime.ContainsKey(player))
         {
             PlayerSpawnTime.Remove(player);

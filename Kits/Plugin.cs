@@ -8,7 +8,7 @@ namespace ExiledKitsPlugin
     {
         public override string Name => "Kits";
         public override string Author => "manderz11";
-        public override Version Version => new Version(1, 1, 7);
+        public override Version Version => new Version(1, 1, 8);
         public static Plugin Instance { get; set; }
         public KitEntryManager KitEntryManager;
         public KitManager KitManager;
@@ -44,7 +44,6 @@ namespace ExiledKitsPlugin
         void RegisterEvents()
         {
             _handlers = new Handlers();
-            //Exiled.Events.Handlers.Server.RoundEnded += _handlers.OnRoundEnded;
             Exiled.Events.Handlers.Server.RestartingRound += _handlers.OnRoundRestart;
             Exiled.Events.Handlers.Player.Left += _handlers.OnPlayerLeave;
             Exiled.Events.Handlers.Player.Spawned += _handlers.SpawnedEvent;
@@ -52,7 +51,6 @@ namespace ExiledKitsPlugin
 
         void UnregisterEvents()
         {
-            //Exiled.Events.Handlers.Server.RoundEnded -= _handlers.OnRoundEnded;
             Exiled.Events.Handlers.Server.RestartingRound -= _handlers.OnRoundRestart;
             Exiled.Events.Handlers.Player.Left -= _handlers.OnPlayerLeave;
             Exiled.Events.Handlers.Player.Spawned -= _handlers.SpawnedEvent;
