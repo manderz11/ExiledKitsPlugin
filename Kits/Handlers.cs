@@ -41,12 +41,6 @@ public class Handlers
         }
     }
 
-    public void RoundStarted()
-    {
-        // clear round kit uses
-        Plugin.Instance.KitManager.KitUseEntries = new List<KitUseEntry>();
-    }
-
     public void OnPlayerLeave(LeftEventArgs leftEventArgs)
     {
         if(Plugin.Instance.Config.Debug)Log.Debug($"Player {leftEventArgs.Player.Nickname} left! Clearing all data.");

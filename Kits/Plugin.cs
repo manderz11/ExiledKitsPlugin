@@ -27,6 +27,7 @@ namespace ExiledKitsPlugin
                 if (!player.IsAlive) continue;
                 KitManager.PlayerSpawnTime.Add(player,Round.ElapsedTime.TotalSeconds);
             }
+            if(Config.Debug) Log.Debug("Plugin enabled");
             base.OnEnabled();
         }
 
@@ -36,6 +37,7 @@ namespace ExiledKitsPlugin
             KitEntryManager = null;
             KitManager = null;
             UnregisterEvents();
+            if(Config.Debug) Log.Debug("Plugin disabled");
             base.OnDisabled();
         }
 
@@ -46,7 +48,6 @@ namespace ExiledKitsPlugin
             Exiled.Events.Handlers.Server.RestartingRound += _handlers.OnRoundRestart;
             Exiled.Events.Handlers.Player.Left += _handlers.OnPlayerLeave;
             Exiled.Events.Handlers.Player.Spawned += _handlers.SpawnedEvent;
-            Exiled.Events.Handlers.Server.RoundStarted += _handlers.RoundStarted;
         }
 
         void UnregisterEvents()
@@ -55,7 +56,6 @@ namespace ExiledKitsPlugin
             Exiled.Events.Handlers.Server.RestartingRound -= _handlers.OnRoundRestart;
             Exiled.Events.Handlers.Player.Left -= _handlers.OnPlayerLeave;
             Exiled.Events.Handlers.Player.Spawned -= _handlers.SpawnedEvent;
-            Exiled.Events.Handlers.Server.RoundStarted -= _handlers.RoundStarted;
             _handlers = null;
         }
     }
