@@ -40,6 +40,146 @@ public class KitManager
         }
     }
     
+    public void ResetKitCooldowns()
+    {
+        List<CooldownEntry> cooldownEntriesToRemove = new List<CooldownEntry>();
+        List<KitEntry> initialCooldownKitEntriesToRemove = new List<KitEntry>();
+        List<KitEntry> timeoutKitEntriesToRemove = new List<KitEntry>();
+        List<KitEntry> initialGlobalCooldownKitEntriesToRemove = new List<KitEntry>();
+
+        if (Plugin.Instance.Config.ResetKitCooldownsOnRoundRestart)
+        {
+            foreach (var cooldownEntry in Plugin.Instance.KitManager.CooldownEntries)
+            {
+                if (cooldownEntry.Kit.ResetCooldownOnRoundRestart != false)
+                {
+                    cooldownEntriesToRemove.Add(cooldownEntry);
+                }
+            }
+            foreach (var kitEntry in Plugin.Instance.KitManager.InitialCooldownKitEntries)
+            {
+                if (kitEntry.ResetCooldownOnRoundRestart != false)
+                {
+                    initialCooldownKitEntriesToRemove.Add(kitEntry);
+                }
+            }
+            foreach (var kitEntry in Plugin.Instance.KitManager.TimeoutKitEntries)
+            {
+                if (kitEntry.ResetCooldownOnRoundRestart != false)
+                {
+                    timeoutKitEntriesToRemove.Add(kitEntry);
+                }
+            }
+
+            foreach (var kitEntry in Plugin.Instance.KitManager.InitialGlobalCooldownKitEntries)
+            {
+                if (kitEntry.ResetCooldownOnRoundRestart != false)
+                {
+                    initialGlobalCooldownKitEntriesToRemove.Add(kitEntry);
+                }
+            }
+
+            foreach (var kitEntry in Plugin.Instance.KitEntryManager.KitEntries)
+            {
+                if (kitEntry.InitialCooldown > 0f && kitEntry.ResetCooldownOnRoundRestart != false)
+                {
+                    Plugin.Instance.KitManager.InitialCooldownKitEntries.Add(kitEntry);
+                }
+
+                if (kitEntry.GlobalKitTimeout > 0f && kitEntry.ResetCooldownOnRoundRestart != false)
+                {
+                    Plugin.Instance.KitManager.TimeoutKitEntries.Add(kitEntry);
+                }
+
+                if (kitEntry.InitialGlobalCooldown > 0f && kitEntry.ResetCooldownOnRoundRestart != false)
+                {
+                    Plugin.Instance.KitManager.InitialGlobalCooldownKitEntries.Add(kitEntry);
+                }
+            }
+        }
+        else
+        {
+            foreach (var cooldownEntry in Plugin.Instance.KitManager.CooldownEntries)
+            {
+                if (cooldownEntry.Kit.ResetCooldownOnRoundRestart == true)
+                {
+                    cooldownEntriesToRemove.Add(cooldownEntry);
+                }
+            }
+            foreach (var kitEntry in Plugin.Instance.KitManager.InitialCooldownKitEntries)
+            {
+                if (kitEntry.ResetCooldownOnRoundRestart == true )
+                {
+                    initialCooldownKitEntriesToRemove.Add(kitEntry);
+                }
+            }
+            foreach (var kitEntry in Plugin.Instance.KitManager.TimeoutKitEntries)
+            {
+                if (kitEntry.ResetCooldownOnRoundRestart == true )
+                {
+                    timeoutKitEntriesToRemove.Add(kitEntry);
+                }
+            }
+
+            foreach (var kitEntry in Plugin.Instance.KitManager.InitialGlobalCooldownKitEntries)
+            {
+                if (kitEntry.ResetCooldownOnRoundRestart == true )
+                {
+                    initialGlobalCooldownKitEntriesToRemove.Add(kitEntry);
+                }
+            }
+
+            foreach (var kitEntry in Plugin.Instance.KitEntryManager.KitEntries)
+            {
+                if (kitEntry.InitialCooldown > 0f && kitEntry.ResetCooldownOnRoundRestart == true )
+                {
+                    Plugin.Instance.KitManager.InitialCooldownKitEntries.Add(kitEntry);
+                }
+
+                if (kitEntry.GlobalKitTimeout > 0f && kitEntry.ResetCooldownOnRoundRestart == true )
+                {
+                    Plugin.Instance.KitManager.TimeoutKitEntries.Add(kitEntry);
+                }
+
+                if (kitEntry.InitialGlobalCooldown > 0f && kitEntry.ResetCooldownOnRoundRestart == true )
+                {
+                    Plugin.Instance.KitManager.InitialGlobalCooldownKitEntries.Add(kitEntry);
+                }
+            }
+        }
+        
+        Plugin.Instance.KitManager.CooldownEntries.RemoveAll(x => cooldownEntriesToRemove.Contains(x));
+        Plugin.Instance.KitManager.InitialCooldownKitEntries.RemoveAll(x => initialCooldownKitEntriesToRemove.Contains(x));
+        Plugin.Instance.KitManager.TimeoutKitEntries.RemoveAll(x => timeoutKitEntriesToRemove.Contains(x));
+        Plugin.Instance.KitManager.InitialGlobalCooldownKitEntries.RemoveAll(x => initialGlobalCooldownKitEntriesToRemove.Contains(x));
+    }
+
+    public void ResetKitUses()
+    {
+        List<KitUseEntry> kitUseEntriesToRemove = new List<KitUseEntry>();
+        if (Plugin.Instance.Config.ResetKitUsesOnRoundRestart)
+        {
+            foreach (var kitUseEntry in Plugin.Instance.KitManager.KitUseEntries)
+            {
+                if (kitUseEntry.KitEntry.ResetUsesOnRoundRestart != false)
+                {
+                    kitUseEntriesToRemove.Add(kitUseEntry);
+                }
+            }
+        }
+        else
+        {
+            foreach (var kitUseEntry in Plugin.Instance.KitManager.KitUseEntries)
+            {
+                if (kitUseEntry.KitEntry.ResetUsesOnRoundRestart == true)
+                {
+                    kitUseEntriesToRemove.Add(kitUseEntry);
+                }
+            }
+        }
+        Plugin.Instance.KitManager.KitUseEntries.RemoveAll(x => kitUseEntriesToRemove.Contains(x));
+    }
+
     public bool IsKitEntryOnCooldown(KitEntry kitEntry, Player player)
     {
         if (CooldownEntries == null)

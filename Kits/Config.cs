@@ -31,7 +31,7 @@ namespace ExiledKitsPlugin
                 InitialCooldown = 20f, CooldownInSeconds = 60f, MaxUses = 2, GlobalKitTimeout = 120, SetRole = RoleTypeId.Tutorial, DropExcess= true, SpawnKitTimeout = 60},
             new KitEntry(){ Name = "Example", UsePermission = true, InitialCooldown = 0f, CooldownInSeconds = 30f, ClearInventory = false, WhitelistedRoles = new List<RoleTypeId>() { RoleTypeId.Scientist, RoleTypeId.FacilityGuard}, 
                 Ammo = null, BlacklistedRoles = null, Effects = new List<Effect>(){new Effect(EffectType.Scp207, 0f, 1, false, true)}, Enabled = true, Items = new List<ItemType>() { ItemType.Adrenaline, ItemType.Medkit, ItemType.Lantern, ItemType.GunCOM15 }, 
-                MaxUses = 2, SetRole = RoleTypeId.NtfCaptain, DropExcess = true, GlobalKitTimeout = 180, InitialGlobalCooldown = 30}
+                MaxUses = 2, SetRole = RoleTypeId.NtfCaptain, DropExcess = true, GlobalKitTimeout = 180, InitialGlobalCooldown = 30, SpawnKitTimeout = 0, ResetUsesOnRoundRestart = false, ResetCooldownOnRoundRestart = true}
         };
 
 		[Description("Should kit cooldowns be reset after round restart?")]

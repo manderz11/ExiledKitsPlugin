@@ -11,31 +11,8 @@ public class Handlers
 {
     public void OnRoundRestart()
     {
-        if(Plugin.Instance.Config.ResetKitUsesOnRoundRestart)Plugin.Instance.KitManager.KitUseEntries = new List<KitUseEntry>();
-        if (Plugin.Instance.Config.ResetKitCooldownsOnRoundRestart)
-        {
-            Plugin.Instance.KitManager.CooldownEntries = new List<CooldownEntry>();
-            Plugin.Instance.KitManager.InitialCooldownKitEntries = new List<KitEntry>();
-            Plugin.Instance.KitManager.TimeoutKitEntries = new List<KitEntry>();
-            Plugin.Instance.KitManager.InitialGlobalCooldownKitEntries = new List<KitEntry>();
-            foreach (var kitEntry in Plugin.Instance.KitEntryManager.KitEntries)
-            {
-                if (kitEntry.InitialCooldown > 0f)
-                {
-                    Plugin.Instance.KitManager.InitialCooldownKitEntries.Add(kitEntry);
-                }
-
-                if (kitEntry.GlobalKitTimeout > 0f)
-                {
-                    Plugin.Instance.KitManager.TimeoutKitEntries.Add(kitEntry);
-                }
-
-                if (kitEntry.InitialGlobalCooldown > 0f)
-                {
-                    Plugin.Instance.KitManager.InitialGlobalCooldownKitEntries.Add(kitEntry);
-                }
-            }
-        }
+        Plugin.Instance.KitManager.ResetKitUses();
+        Plugin.Instance.KitManager.ResetKitCooldowns();
     }
 
     public void SpawnedEvent(SpawnedEventArgs spawnedEventArgs)

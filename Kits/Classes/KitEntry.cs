@@ -33,6 +33,11 @@ namespace ExiledKitsPlugin.Classes
         public bool ClearInventory { get; set; }
         [Description("Should excess items be dropped")]
         public bool DropExcess { get; set; }
+
+        [Description("Should kit uses be reset on round restart (overrides config value)")]
+        [CanBeNull] public bool? ResetUsesOnRoundRestart { get; set; }
+        [Description("Should kit uses be reset on round restart (overrides config value)")]
+        [CanBeNull] public bool? ResetCooldownOnRoundRestart { get; set; }
         [CanBeNull] public List<ItemType> Items { get; set; }
         [CanBeNull] public Dictionary<AmmoType, ushort> Ammo { get; set; }
         [CanBeNull] public List<Effect> Effects { get; set; }
