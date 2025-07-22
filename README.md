@@ -22,51 +22,55 @@ Examples are provided as of the latest aviable version, including pre-releases.
 
 Example kit (generated from initial plugin launch):
 ```
-  - name: 'Example'
-    enabled: true
-    # Should the kit be permissions based
-    use_permission: true
-    # Initial cooldown of the kit after player spawn, set to 0 to disable
-    initial_cooldown: 0
-    # Initial cooldown of the kit after game start, set to 0 to disable
-    initial_global_cooldown: 30
-    # Time after game start to timeout kit (disable redeeming), set to 0 to disable
-    global_kit_timeout: 180
-    # Time after player spawn to timeout kit (disable redeeming), set to 0 to disable
-    spawn_kit_timeout: 0
-    # Kit re-use cooldown in seconds, set to 0 to disable
-    cooldown_in_seconds: 30
-    # Maximum number of uses per game, set to 0 to disable
-    max_uses: 2
-    # Allowed roles to redeem kit
-    whitelisted_roles:
-    - Scientist
-    - FacilityGuard
-    # Blacklisted roles to redeem kit, overrides whitelisted if the same role is set in whitelisted
-    blacklisted_roles: 
-    # Should kit delete existing inventory items
-    clear_inventory: false
-    # Should excess items be destroyed
-    drop_excess: false
-    items:
-    - Adrenaline
-    - Medkit
-    - Lantern
-    - GunCOM15
-    ammo: 
-    effects:
-    -
-    # The effect type
-      type: Scp207
-      # The effect duration
-      duration: 0
-      # The effect intensity
-      intensity: 1
-      # If the effect is already active, setting to true will add this duration onto the effect.
-      add_duration_if_active: false
-      # Indicates whether the effect should be enabled or not
-      is_enabled: true
-    set_role: NtfCaptain
+- name: 'Example'
+  enabled: true
+  # Should the kit be permissions based
+  use_permission: true
+  # Initial cooldown of the kit after player spawn, set to 0 to disable
+  initial_cooldown: 0
+  # Initial cooldown of the kit after game start, set to 0 to disable
+  initial_global_cooldown: 30
+  # Time after game start to timeout kit (disable redeeming), set to 0 to disable
+  global_kit_timeout: 180
+  # Time after player spawn to timeout kit (disable redeeming), set to 0 to disable
+  spawn_kit_timeout: 0
+  # Kit re-use cooldown in seconds, set to 0 to disable
+  cooldown_in_seconds: 30
+  # Maximum number of uses per game, set to 0 to disable
+  max_uses: 2
+  # Allowed roles to redeem kit
+  whitelisted_roles:
+  - Scientist
+  - FacilityGuard
+  # Blacklisted roles to redeem kit, overrides whitelisted if the same role is set in whitelisted
+  blacklisted_roles: 
+  # Should kit delete all existing inventory items
+  clear_inventory: false
+  # Should excess items be dropped
+  drop_excess: true
+  # Should kit uses be reset on round restart (overrides config value)
+  reset_uses_on_round_restart: false
+  # Should kit uses be reset on round restart (overrides config value)
+  reset_cooldown_on_round_restart: true
+  items:
+  - Adrenaline
+  - Medkit
+  - Lantern
+  - GunCOM15
+  ammo: 
+  effects:
+  -
+  # The effect type
+    type: Scp207
+    # The effect duration
+    duration: 0
+    # The effect intensity
+    intensity: 1
+    # If the effect is already active, setting to true will add this duration onto the effect.
+    add_duration_if_active: false
+    # Indicates whether the effect should be enabled
+    is_enabled: true
+  set_role: NtfCaptain
 ```
 
 ## Permissions
