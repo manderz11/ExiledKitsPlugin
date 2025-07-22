@@ -16,7 +16,6 @@ public class KitManager
 
     public KitManager()
     {
-        // reset all cooldowns between games
         CooldownEntries = new List<CooldownEntry>();
         InitialCooldownKitEntries = new List<KitEntry>();
         TimeoutKitEntries = new List<KitEntry>();

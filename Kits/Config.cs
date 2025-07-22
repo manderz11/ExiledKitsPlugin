@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.API.Features.Roles;
 using Exiled.API.Interfaces;
 using ExiledKitsPlugin.Classes;
 using PlayerRoles;
@@ -34,6 +33,12 @@ namespace ExiledKitsPlugin
                 Ammo = null, BlacklistedRoles = null, Effects = new List<Effect>(){new Effect(EffectType.Scp207, 0f, 1, false, true)}, Enabled = true, Items = new List<ItemType>() { ItemType.Adrenaline, ItemType.Medkit, ItemType.Lantern, ItemType.GunCOM15 }, 
                 MaxUses = 2, SetRole = RoleTypeId.NtfCaptain, DropExcess = true, GlobalKitTimeout = 180, InitialGlobalCooldown = 30}
         };
+
+		[Description("Should kit cooldowns be reset after round restart?")]
+		public bool ResetKitCooldownsOnRoundRestart { get; set; } = true;
+
+		[Description("Should kit uses be reset after round restart?")]
+		public bool ResetKitUsesOnRoundRestart { get; set; } = true;
         
         [Description("Should plugin show debug information?")]
         public bool Debug { get; set; } = false;
